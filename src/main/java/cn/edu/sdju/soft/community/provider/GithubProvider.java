@@ -37,7 +37,7 @@ public class GithubProvider {
     public GithubUser getUser(String accessToken){
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
-                .url("https://api.github.com/user?access_token=8ffea222e5b806c078665e21ff5fee00736fd7d4git")
+                .url("https://api.github.com/user?access_token=31929b909d039b0d0f93a7fd819f66c5ae447776")
                 .build();
         try {
             Response response = client.newCall(request).execute();
