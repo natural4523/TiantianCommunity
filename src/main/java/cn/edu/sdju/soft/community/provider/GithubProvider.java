@@ -37,13 +37,14 @@ public class GithubProvider {
     public GithubUser getUser(String accessToken){
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
-                .url("https://api.github.com/user?access_token=4d6f3bd99b96d6d46865ae96f19856e7e7f61176")
+                .url("https://api.github.com/user?access_token=8ffea222e5b806c078665e21ff5fee00736fd7d4git")
                 .build();
         try {
             Response response = client.newCall(request).execute();
             String string = response.body().string();
             //将json对象自动解析转换成java的类对象
             GithubUser githubUser = JSON.parseObject(string, GithubUser.class);
+            System.out.println(githubUser);
             return githubUser;
         } catch (IOException e) {
             e.printStackTrace();
