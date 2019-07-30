@@ -21,16 +21,19 @@ public class IndexController {
     public String index(HttpServletRequest request){
         /*service层需要抛出异常，只用controller的话可能同一种异常多处try-catch*/
         Cookie[] cookies = request.getCookies();
-        for (Cookie cookie:cookies) {
-            if (cookie.getName().equals("token")){
-                String token = cookie.getValue();
-                User user = userMapper.findByToken(token);
-                if (user != null){
-                    request.getSession().setAttribute("user",user);
+        if (cookies != null){
+            for (Cookie cookie:cookies) {
+                if ("token".equals(cookie.getName())){
+                    String token = cookie.getValue();
+                    User user = userMapper.findByToken(token);
+                    if (user != null){
+                        request.getSession().setAttribute("user",user);
+                    }
+                    break;
                 }
-                break;
             }
         }
+
         return "index";
     }
 
