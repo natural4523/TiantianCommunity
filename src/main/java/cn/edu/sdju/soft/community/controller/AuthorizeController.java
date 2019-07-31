@@ -34,10 +34,10 @@ public class AuthorizeController {
     @Value("${github.client.id}")//会去配置文件里读
     private String clientId;
 
-    @Value("{github.client.secret}")
+    @Value("${github.client.secret}")
     private String clientSecret;
 
-    @Value("{github.redirect.uri}")
+    @Value("${github.redirect.uri}")
     private String redirectUri;
 
     @Autowired
@@ -56,6 +56,7 @@ public class AuthorizeController {
         accessTokenDTO.setState(state);
 
         String accessToken = githubProvider.getAccessToken(accessTokenDTO);
+        System.out.println(accessToken);
         /*shift+F6替换所有user*/
         GithubUser githubUser = githubProvider.getUser(accessToken);
         /*当使用github登录成功时，获取用户信息，生成一个token，把token放入到用户对象里去，存储到数据库中，并且把token放到数据库里去*/
