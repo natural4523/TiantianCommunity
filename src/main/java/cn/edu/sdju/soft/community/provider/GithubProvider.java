@@ -27,6 +27,7 @@ public class GithubProvider {
             String token = string.split("&")[0].split("=")[1];
             /*String tokenstr = split[0];
             String token = tokenstr.split("=")[1];*/
+            System.out.println(token);
             return token;
         } catch (Exception e) {
             e.printStackTrace();
@@ -37,12 +38,13 @@ public class GithubProvider {
     public GithubUser getUser(String accessToken){
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
-                .url("https://api.github.com/user?access_token=18f1ce37e2cf1f7ea5f50305d4f12a8390d70e4e")
+                .url("https://api.github.com/user?access_token=" + accessToken)
                 .build();
         try {
             Response response = client.newCall(request).execute();
             String string = response.body().string();
             //将json对象自动解析转换成java的类对象
+            //fastjson可以自动把下划线标示映射到驼峰的属性(avatar_url -> avatarUrl)
             GithubUser githubUser = JSON.parseObject(string, GithubUser.class);
             System.out.println(githubUser);
             return githubUser;

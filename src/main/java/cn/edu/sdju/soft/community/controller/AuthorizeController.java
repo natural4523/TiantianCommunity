@@ -16,6 +16,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
+/**
+ * github授权登录：
+ * 1.点击登录，authorize
+ * 2.github回调redirect-uri 携带code到社区（执行callback的controller）
+ * 3.access_token携带code到github（getAccessToken()方法里的request请求）
+ * 4.github返回access_token到社区（getAccessToken()方法里的response响应获得）
+ * 5.user携带access_token到github（getUser()方法里的request请求）
+ * 6.github返回user信息(getUser()方法里的response响应获得)
+ */
 @Controller
 public class AuthorizeController {
 
@@ -59,6 +68,7 @@ public class AuthorizeController {
             user.setAccountId(String.valueOf(githubUser.getId()));
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
+            user.setAvatarUrl(githubUser.getAvatar_url());
             /*Ctrl+Alt+v抽取变量*/
             userMapper.insert(user);
             response.addCookie(new Cookie("token",token));
