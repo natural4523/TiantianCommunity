@@ -22,7 +22,7 @@ public class PublishController {
     private QuestionService questionService;
 
     @GetMapping("/publish/{id}")
-    public String edit(@PathVariable("id")Integer id,Model model){
+    public String edit(@PathVariable("id")Long id,Model model){
         QuestionDTO question = questionService.getById(id);
         model.addAttribute("title",question.getTitle());
         model.addAttribute("description",question.getDescription());
@@ -40,7 +40,7 @@ public class PublishController {
     public String doPublish(@RequestParam("title")String title,
                             @RequestParam("description")String description,
                             @RequestParam("tag")String tag,
-                            @RequestParam("id")Integer id,
+                            @RequestParam("id")Long id,
                             HttpServletRequest request,
                             Model model){
         /*发布错误的时候，用来保存原先输入的信息*/
@@ -61,8 +61,6 @@ public class PublishController {
             model.addAttribute("error","标签不能为空");
             return "publish";
         }
-
-
 
         /*获取cookie中的user对象*/
         User user = (User) request.getSession().getAttribute("user");
