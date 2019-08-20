@@ -113,3 +113,23 @@ function comment2target(targetId,type,content){
         }
     })
 }
+
+function showSelectTag() {
+    $("#select-tag").show();
+}
+
+function selectTag(e) {
+    var value = e.getAttribute("data-tag");
+    var previous = $("#tag").val();
+
+    /*判断添加的标签是否出现过*/
+    if (previous.indexOf(value) == -1){
+        if (previous){
+            $("#tag").val(previous + '，' + value);
+        }else{
+            $("#tag").val(value);
+        }
+    }
+
+
+}
