@@ -76,7 +76,7 @@ public class QuestionService {
             //因为返回的对象是集合，所以把封装完毕的QuestionDTO对象装到集合里去返回
             questionDTOList.add(questionDTO);
         }
-        paginationDTO.setQuestions(questionDTOList);
+        paginationDTO.setData(questionDTOList);
         return paginationDTO;
     }
 
@@ -128,7 +128,7 @@ public class QuestionService {
             //因为返回的对象是集合，所以把封装完毕的QuestionDTO对象装到集合里去返回
             questionDTOList.add(questionDTO);
         }
-        paginationDTO.setQuestions(questionDTOList);
+        paginationDTO.setData(questionDTOList);
         return paginationDTO;
     }
 
