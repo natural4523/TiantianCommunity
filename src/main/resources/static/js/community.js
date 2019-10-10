@@ -1,3 +1,6 @@
+/**
+ * 提交一级评论
+ */
 function post() {
     var questionId = $("#question_id").val();
     var content = $("#comment_content").val();
@@ -12,6 +15,7 @@ function collapseComments(e) {
     var id = e.getAttribute("data-id");
     var comments = $("#comment-" + id);
 
+    console.log(comments);
     // 获取一下二级评论的展开状态
     var collapse = e.getAttribute("data-collapse");
     if (collapse) {
@@ -74,13 +78,22 @@ function collapseComments(e) {
     }
 }
 
-
+/**
+ * 提交二级评论
+ * @param e
+ */
 function comment(e) {
     var commentId = e.getAttribute("data-id");
     var content = $("#input-"+commentId).val();
     comment2target(commentId,2,content);
 }
 
+/**
+ * 一级、二级评论的ajax
+ * @param targetId
+ * @param type
+ * @param content
+ */
 function comment2target(targetId,type,content){
     if (!content) {
         alert("不能回复空内容！");
@@ -114,16 +127,24 @@ function comment2target(targetId,type,content){
     })
 }
 
+/**
+ * 展示标签
+ */
 function showSelectTag() {
     $("#select-tag").show();
 }
 
+/**
+ * 判断添加的标签是否出现过
+ * @param e
+ */
 function selectTag(e) {
     var value = e.getAttribute("data-tag");
     var previous = $("#tag").val();
 
     /*判断添加的标签是否出现过*/
     if (previous.indexOf(value) == -1){
+        /*假如之前添加过标签*/
         if (previous){
             $("#tag").val(previous + '，' + value);
         }else{

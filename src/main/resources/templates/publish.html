@@ -19,7 +19,6 @@
     <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
     <script th:src="@{/js/editormd.min.js}" type="application/javascript"></script>
-
 </head>
 <body>
 <div th:insert="navigation :: nav"></div>
@@ -50,8 +49,11 @@
                             height: 350,
                             path: "/js/lib/",
                             delay: 0,
-                            watch:false,
-                            placeholder:"请输入问题描述"
+                            watch: false,
+                            placeholder: "请输入问题描述",
+                            imageUpload: true,
+                            imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+                            imageUploadURL: "/file/upload"
                         });
                     });
                 </script>
