@@ -34,7 +34,7 @@
     select count(*) from QUESTION
     <where>
       <if test="search != null">
-        and TITLE regexp #{search}
+        and TITLE like CONCAT('%',#{search},'%')
       </if>
     </where>
   </select>
@@ -43,7 +43,7 @@
     select * from QUESTION
     <where>
       <if test="search != null">
-        and TITLE regexp #{search}
+        and TITLE like CONCAT('%',#{search},'%')
       </if>
     </where>
     order by gmt_create desc

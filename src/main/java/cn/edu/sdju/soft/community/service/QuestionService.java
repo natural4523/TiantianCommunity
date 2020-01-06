@@ -62,6 +62,9 @@ public class QuestionService {
             page = totalPage;
         }
 
+        if(page == 0){
+            page = 1;
+        }
         paginationDTO.setPagination(totalPage,page);
 
 
