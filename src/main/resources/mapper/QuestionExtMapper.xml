@@ -11,6 +11,7 @@
     <result column="VIEW_COUNT" jdbcType="INTEGER" property="viewCount" />
     <result column="LIKE_COUNT" jdbcType="INTEGER" property="likeCount" />
     <result column="TAG" jdbcType="VARCHAR" property="tag" />
+    <result column="section_id" jdbcType="BIGINT" property="sectionId"/>
   </resultMap>
   <update id="incView" parameterType="cn.edu.sdju.soft.community.model.Question">
     update QUESTION
@@ -33,8 +34,11 @@
   <select id="countBySearch" parameterType="cn.edu.sdju.soft.community.dto.QuestionQueryDTO" resultType="java.lang.Integer">
     select count(*) from QUESTION
     <where>
-      <if test="search != null">
+      <if test="search != null and search != ''">
         and TITLE like CONCAT('%',#{search},'%')
+      </if>
+      <if test="sectionId != null and sectionId != ''">
+        and section_id = #{sectionId}
       </if>
     </where>
   </select>
@@ -42,8 +46,11 @@
   <select id="selectBySearch" parameterType="cn.edu.sdju.soft.community.dto.QuestionQueryDTO" resultMap="BaseResultMap">
     select * from QUESTION
     <where>
-      <if test="search != null">
+      <if test="search != null and search != ''">
         and TITLE like CONCAT('%',#{search},'%')
+      </if>
+      <if test="sectionId != null and sectionId != ''">
+        and section_id = #{sectionId}
       </if>
     </where>
     order by gmt_create desc

@@ -1,5 +1,7 @@
 package cn.edu.sdju.soft.community.model;
 
+import java.math.BigInteger;
+
 public class Question {
     /**
      *
@@ -99,6 +101,9 @@ public class Question {
      *
      * @mbg.generated Wed Aug 21 11:08:49 CST 2019
      */
+
+    public Long sectionId;
+
     public Long getId() {
         return id;
     }
@@ -329,5 +334,14 @@ public class Question {
      */
     public void setDescription(String description) {
         this.description = description == null ? null : description.trim();
+    }
+
+
+    public void setSectionId(Long sectionId) {
+        this.sectionId = sectionId;
+    }
+
+    public Long getSectionId() {
+        return sectionId;
     }
 }
