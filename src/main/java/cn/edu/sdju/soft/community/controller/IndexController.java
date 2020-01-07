@@ -35,11 +35,14 @@ public class IndexController {
                         ){
         /*service层需要抛出异常，只用controller的话可能同一种异常多处try-catch*/
         PaginationDTO pagination = questionService.list(search,sectionId,page,size);
+        //总页数不对
         List<Section> sectionList = sectionService.findAllSections();
         model.addAttribute("sectionList",sectionList);
+        model.addAttribute("sectionId",sectionId);
         model.addAttribute("pagination",pagination);
         model.addAttribute("search",search);
         return "index";
     }
+
 
 }
