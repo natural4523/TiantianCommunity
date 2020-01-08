@@ -100,7 +100,7 @@
       This element was generated on Wed Aug 21 11:08:49 CST 2019.
     -->
     ID, TITLE, GMT_CREATE, GMT_MODIFIED, CREATOR, COMMENT_COUNT, VIEW_COUNT, LIKE_COUNT, 
-    TAG
+    TAG,section_id
   </sql>
   <sql id="Blob_Column_List">
     <!--
@@ -192,11 +192,11 @@
     insert into QUESTION (ID, TITLE, GMT_CREATE, 
       GMT_MODIFIED, CREATOR, COMMENT_COUNT, 
       VIEW_COUNT, LIKE_COUNT, TAG, 
-      DESCRIPTION)
+      DESCRIPTION,section_id)
     values (#{id,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=BIGINT}, 
       #{gmtModified,jdbcType=BIGINT}, #{creator,jdbcType=BIGINT}, #{commentCount,jdbcType=INTEGER}, 
       #{viewCount,jdbcType=INTEGER}, #{likeCount,jdbcType=INTEGER}, #{tag,jdbcType=VARCHAR}, 
-      #{description,jdbcType=CLOB})
+      #{description,jdbcType=CLOB},#{sectionId,jdbcType=BIGINT})
   </insert>
   <insert id="insertSelective" parameterType="cn.edu.sdju.soft.community.model.Question">
     <!--
@@ -318,6 +318,9 @@
       </if>
       <if test="record.description != null">
         DESCRIPTION = #{record.description,jdbcType=CLOB},
+      </if>
+      <if test="record.sectionId != null">
+        section_id = #{record.sectionId,jdbcType=BIGINT},
       </if>
     </set>
     <if test="_parameter != null">

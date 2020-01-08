@@ -4,18 +4,18 @@ import cn.edu.sdju.soft.community.cache.TagCache;
 import cn.edu.sdju.soft.community.dto.QuestionDTO;
 import cn.edu.sdju.soft.community.mapper.QuestionMapper;
 import cn.edu.sdju.soft.community.model.Question;
+import cn.edu.sdju.soft.community.model.Section;
 import cn.edu.sdju.soft.community.model.User;
 import cn.edu.sdju.soft.community.service.QuestionService;
+import cn.edu.sdju.soft.community.service.SectionService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Controller
 public class PublishController {
@@ -23,14 +23,20 @@ public class PublishController {
     @Autowired
     private QuestionService questionService;
 
+    @Autowired
+    private SectionService sectionService;
+
     @GetMapping("/publish/{id}")
     public String edit(@PathVariable("id")Long id,Model model){
         QuestionDTO question = questionService.getById(id);
+        List<Section> sectionList = sectionService.findAllSections();
         model.addAttribute("title",question.getTitle());
         model.addAttribute("description",question.getDescription());
         model.addAttribute("tag",question.getTag());
         model.addAttribute("id",question.getId());
 
+        model.addAttribute("sectionId",question.getSectionId());
+        model.addAttribute("sectionList",sectionList);
         model.addAttribute("tags", TagCache.get());
         return "publish";
     }
@@ -38,6 +44,8 @@ public class PublishController {
     @GetMapping("/publish")
     public String publish(Model model){
         model.addAttribute("tags", TagCache.get());
+        List<Section> sectionList = sectionService.findAllSections();
+        model.addAttribute("sectionList",sectionList);
         return "publish";
     }
 
@@ -46,6 +54,7 @@ public class PublishController {
                             @RequestParam("description")String description,
                             @RequestParam("tag")String tag,
                             @RequestParam("id")Long id,
+                            @RequestParam("sectionId")Long sectionId,
                             HttpServletRequest request,
                             Model model){
         /*发布错误的时候，用来保存原先输入的信息*/
@@ -53,6 +62,7 @@ public class PublishController {
         model.addAttribute("description",description);
         model.addAttribute("tag",tag);
         model.addAttribute("tags", TagCache.get());
+        model.addAttribute("sectionId",sectionId);
 
         /*校验*/
         if (title == null || title == ""){
@@ -65,6 +75,10 @@ public class PublishController {
         }
         if (tag == null || tag == ""){
             model.addAttribute("error","标签不能为空");
+            return "publish";
+        }
+        if (sectionId == null) {
+            model.addAttribute("error","版块选择不能为空");
             return "publish";
         }
 
@@ -88,8 +102,11 @@ public class PublishController {
         question.setTag(tag);
         question.setCreator(user.getId());
         question.setId(id);
+        question.setSectionId(sectionId);
         questionService.createOrUpdate(question);
 
         return "redirect:/";
     }
+
+
 }

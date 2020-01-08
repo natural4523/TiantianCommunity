@@ -57,6 +57,7 @@
                         });
                     });
                 </script>
+                <!--标签-->
                 <div class="form-group">
                     <label for="tag">添加标签:</label>
                     <input type="text" class="form-control" th:value="${tag}" id="tag" name="tag"
@@ -80,11 +81,20 @@
                                           th:text="${' ' + selectTag}"></span>
                                 </span>
                             </div>
-
                         </div>
-
                     </div>
                 </div>
+
+                <div class="form-group" >
+                    <label for="sectionId">
+                        问题类型:
+                    </label>
+                    <select class="form-control" id="sectionId" th:name="sectionId">
+                        <option th:each="section:${sectionList}" th:value="${section.id}" th:text="${section.name}"
+                                th:selected="${section.id} == ${sectionId}"></option>
+                    </select>
+                </div>
+
 
                 <span class="alert alert-danger" th:text="${error}" th:if="${error != null}"></span>
                 <button type="submit" class="btn btn-success btn-publish">发布</button>
@@ -100,4 +110,5 @@
 </div>
 <div th:insert="footer :: foot"></div>
 </body>
+
 </html>
