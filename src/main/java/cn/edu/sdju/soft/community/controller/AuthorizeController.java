@@ -10,12 +10,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -84,12 +89,78 @@ public class AuthorizeController {
     }
 
     @GetMapping("/logout")
-    public String logout(HttpServletRequest request,
-                         HttpServletResponse response){
-        request.getSession().removeAttribute("user");
-        Cookie cookie = new Cookie("token",null);
-        cookie.setMaxAge(0);
-        response.addCookie(cookie);
+    public String logout(HttpSession session){
+        session.removeAttribute("user");
+        session.invalidate();
         return "redirect:/";
+    }
+
+    @GetMapping("/toLogin")
+    public String toLogin(){
+        return "login";
+    }
+
+    @PostMapping("/login")
+    public String login(@RequestParam("username")String username,
+                        @RequestParam("password") String password,
+                        HttpSession session,
+                        Model model){
+        User user = userService.findByUsername(username,password);
+        if (user == null){
+            model.addAttribute("error","登录失败，请重新登录！");
+            return "login";
+        }else{
+            session.setAttribute("user",user);
+            return "redirect:/";
+        }
+
+    }
+
+    @GetMapping("/toRegister")
+    public String toRegister(){
+        return "register";
+    }
+
+    @PostMapping("/register")
+    public String register(@RequestParam("username")String username,
+                           @RequestParam("password")String password,
+                           @RequestParam("name")String name,
+                           @RequestParam("email")String email,
+                           Model model){
+        /*发布错误的时候，用来保存原先输入的信息*/
+        model.addAttribute("username",username);
+        model.addAttribute("password",password);
+        model.addAttribute("name",name);
+        model.addAttribute("email", email);
+
+        /*校验*/
+        if (username == null || username == ""){
+            model.addAttribute("error","用户名不能为空");
+            return "publish";
+        }
+        if (password == null || password == ""){
+            model.addAttribute("error","密码不能为空");
+            return "publish";
+        }
+        if (name == null || name == ""){
+            model.addAttribute("error","昵称不能为空");
+            return "publish";
+        }
+        if (email == null || email == "") {
+            model.addAttribute("error","邮箱不能为空");
+            return "publish";
+        }
+
+        User user = new User();
+        user.setUsername(username);
+        user.setPassword(password);
+        user.setName(name);
+        user.setEmail(email);
+        user.setGmtCreate(System.currentTimeMillis());
+        user.setState(1L);
+        user.setAvatarUrl("/images/default-avatar.png");
+        userService.createUser(user);
+
+        return "login";
     }
 }

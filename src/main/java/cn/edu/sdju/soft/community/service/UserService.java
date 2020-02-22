@@ -1,5 +1,6 @@
 package cn.edu.sdju.soft.community.service;
 
+import cn.edu.sdju.soft.community.mapper.UserExtMapper;
 import cn.edu.sdju.soft.community.mapper.UserMapper;
 import cn.edu.sdju.soft.community.model.User;
 import cn.edu.sdju.soft.community.model.UserExample;
@@ -13,6 +14,9 @@ public class UserService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private UserExtMapper userExtMapper;
 
     public void createOrUpdate(User user) {
         //User dbUser = userMapper.findByAccountId(user.getAccountId());
@@ -37,5 +41,14 @@ public class UserService {
             userMapper.updateByExampleSelective(updateUser,example);
             //userMapper.update(dbUser);
         }
+    }
+
+    public User findByUsername(String username, String password) {
+        User user = userExtMapper.findByUsername(username,password);
+        return user;
+    }
+
+    public void createUser(User user) {
+        userExtMapper.createUser(user);
     }
 }
