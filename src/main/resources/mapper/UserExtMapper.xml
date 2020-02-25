@@ -104,4 +104,25 @@
     </if>
     </trim>
   </insert>
+
+  <select id="findListByUsername" parameterType="cn.edu.sdju.soft.community.model.User" resultMap="BaseResultMap">
+    select * from USER where username = #{username}
+  </select>
+
+  <update id="freezeByUserId" parameterType="cn.edu.sdju.soft.community.model.User">
+    update user
+    set state = 0
+    where ID = #{id}
+  </update>
+
+  <select id="findByUserId" parameterType="cn.edu.sdju.soft.community.model.User" resultMap="BaseResultMap">
+    select * from USER where id = #{id}
+  </select>
+
+  <update id="unfreezeByUserId" parameterType="cn.edu.sdju.soft.community.model.User">
+    update user
+    set state = 1
+    where ID = #{id}
+  </update>
+
 </mapper>

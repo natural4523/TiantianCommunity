@@ -11,10 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -89,9 +86,13 @@ public class AuthorizeController {
     }
 
     @GetMapping("/logout")
-    public String logout(HttpSession session){
-        session.removeAttribute("user");
-        session.invalidate();
+    public String logout(HttpServletRequest request,HttpServletResponse response){
+        /*session.removeAttribute("user");
+        session.invalidate();*/
+        request.getSession().removeAttribute("user");
+        Cookie cookie = new Cookie("user",null);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
         return "redirect:/";
     }
 
@@ -103,14 +104,16 @@ public class AuthorizeController {
     @PostMapping("/login")
     public String login(@RequestParam("username")String username,
                         @RequestParam("password") String password,
-                        HttpSession session,
+                        /*HttpSession session,*/
+                        HttpServletResponse response,
                         Model model){
         User user = userService.findByUsername(username,password);
         if (user == null){
             model.addAttribute("error","登录失败，请重新登录！");
             return "login";
         }else{
-            session.setAttribute("user",user);
+            /*session.setAttribute("user",user);*/
+            response.addCookie(new Cookie("user",username));
             return "redirect:/";
         }
 
@@ -163,4 +166,6 @@ public class AuthorizeController {
 
         return "login";
     }
+
+
 }

@@ -51,4 +51,17 @@ public class UserService {
     public void createUser(User user) {
         userExtMapper.createUser(user);
     }
+
+    public void freezeByUserId(long id) {
+        userExtMapper.freezeByUserId(id);
+    }
+
+    public User findByUserId(long id) {
+        User user = userExtMapper.findByUserId(id);
+        return user;
+    }
+
+    public void unfreezeByUserId(long id) {
+        userExtMapper.unfreezeByUserId(id);
+    }
 }

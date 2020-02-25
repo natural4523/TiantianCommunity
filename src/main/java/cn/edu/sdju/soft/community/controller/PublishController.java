@@ -55,6 +55,7 @@ public class PublishController {
                             @RequestParam("tag")String tag,
                             @RequestParam("id")Long id,
                             @RequestParam("sectionId")Long sectionId,
+                            @RequestParam("state")Long state,
                             HttpServletRequest request,
                             Model model){
         /*发布错误的时候，用来保存原先输入的信息*/
@@ -81,10 +82,13 @@ public class PublishController {
             model.addAttribute("error","版块选择不能为空");
             return "publish";
         }
-
         String invalid = TagCache.filterInvalid(tag);
         if (StringUtils.isNotBlank(invalid)){
             model.addAttribute("error","输入非法标签:" + invalid);
+            return "publish";
+        }
+        if (state == 0){
+            model.addAttribute("error","您的账户已被冻结，无法发布问题");
             return "publish";
         }
 

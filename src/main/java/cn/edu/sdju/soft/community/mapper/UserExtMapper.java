@@ -12,4 +12,13 @@ public interface UserExtMapper {
     User findByUsername(@Param("username") String username, @Param("password") String password);
 
     void createUser(User user);
+
+    List<User> findListByUsername(@Param("username") String username);
+
+    void freezeByUserId(@Param("id") long id);
+
+    User findByUserId(@Param("id") long id);
+
+    void unfreezeByUserId(@Param("id") long id);
+
 }

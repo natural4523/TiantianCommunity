@@ -1,5 +1,6 @@
 package cn.edu.sdju.soft.community.interceptor;
 
+import cn.edu.sdju.soft.community.mapper.UserExtMapper;
 import cn.edu.sdju.soft.community.mapper.UserMapper;
 import cn.edu.sdju.soft.community.model.Notification;
 import cn.edu.sdju.soft.community.model.User;
@@ -23,16 +24,20 @@ public class SessionInterceptor implements HandlerInterceptor {
     @Autowired
     private NotificationService notificationService;
 
+    @Autowired
+    private UserExtMapper userExtMapper;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         Cookie[] cookies = request.getCookies();
         if (cookies != null && cookies.length != 0){
             for (Cookie cookie:cookies) {
-                if ("token".equals(cookie.getName())){
-                    String token = cookie.getValue();
-                    UserExample userExample = new UserExample();
-                    userExample.createCriteria().andTokenEqualTo(token);
-                    List<User> users = userMapper.selectByExample(userExample);
+                if ("user".equals(cookie.getName())){
+                    String username = cookie.getValue();
+                    //UserExample userExample = new UserExample();
+                    //userExample.createCriteria().andTokenEqualTo(token);
+                    //List<User> users = userMapper.selectByExample(userExample);
+                    List<User> users = userExtMapper.findListByUsername(username);
                     //User user = userMapper.findByToken(token);
                     if (users.size() != 0){
                         request.getSession().setAttribute("user",users.get(0));
@@ -43,6 +48,8 @@ public class SessionInterceptor implements HandlerInterceptor {
                 }
             }
         }
+
+
         return true;
     }
 

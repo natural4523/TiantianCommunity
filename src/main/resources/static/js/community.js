@@ -99,32 +99,53 @@ function comment2target(targetId,type,content){
         alert("不能回复空内容！");
         return;
     }
+
+    var userId = $('#userId').val();
+    var userState = 0;
     $.ajax({
-        type: "post",
-        url: "/comment",
+        type: "get",
+        url: "/findById/" + userId,
         contentType: "application/json",
-        data: JSON.stringify({
-            "parentId": targetId,
-            "content": content,
-            "type": type
-        }),
         dataType: "json",
-        success: function (response) {
-            if (response.code == 200) {
-                window.location.reload();
-            } else {
-                if (response.code == 2003) {
-                    var isAccepted = confirm(response.message);
-                    if (isAccepted) {
-                        window.open("https://github.com/login/oauth/authorize?client_id=0061be9fbd36a5f8a59a&redirect_uri=http://localhost:8081/callback&scope=user&state=1");
-                        window.localStorage.setItem("closable", true);
+        success: function (data) {
+            userState = data.state;
+            if (userState == 0) {
+                alert("您的账号已被封禁，如有误封，请联系管理员！");
+                return;
+            }else {
+                $.ajax({
+                    type: "post",
+                    url: "/comment",
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        "parentId": targetId,
+                        "content": content,
+                        "type": type
+                    }),
+                    dataType: "json",
+                    success: function (response) {
+                        if (response.code == 200) {
+                            window.location.reload();
+                        } else {
+                            if (response.code == 2003) {
+                                var isAccepted = confirm(response.message);
+                                if (isAccepted) {
+                                    window.open("/toLogin");
+                                    window.localStorage.setItem("closable", true);
+                                }
+                            }
+                            alert(response.message);
+                        }
+                        console.log(response)
                     }
-                }
-                alert(response.message);
+                })
             }
-            console.log(response)
         }
     })
+
+
+
+
 }
 
 /**
@@ -151,7 +172,84 @@ function selectTag(e) {
             $("#tag").val(value);
         }
     }
-
-
 }
 
+/**
+ * 封禁用户和解封用户(问题界面的按钮)
+ * @param e
+ */
+function freezeOrUnfreeze(e) {
+    var userId = e.getAttribute("data-id");
+    var userState = 0;
+
+    $.ajax({
+        type: "get",
+        url: "/findById/" + userId,
+        contentType: "application/json",
+        /*data: {
+            "userId": userId
+        },*/
+        dataType: "json",
+        success: function (data) {
+            userState = data.state;
+            console.log("当前用户状态:" + userState)
+            if (userState == 1){
+                $.ajax({
+                    type: "get",
+                    url: "/freeze/" + userId,
+                    contentType: "application/json",
+                    /*data: {
+                        "userId": userId
+                    },*/
+                    dataType: "json",
+                    success: function (data) {
+                        userState = data.state;
+                        console.log("处理之后用户状态:" +userState)
+                    }
+
+                })
+                $('#stateButton').text("解封该用户")
+            }else if (userState == 0){
+                $.ajax({
+                    type: "get",
+                    url: "/unfreeze/" + userId,
+                    contentType: "application/json",
+                    /*data: {
+                        "userId": userId
+                    },*/
+                    dataType: "json",
+                    success: function (data) {
+                        userState = data.state;
+                        console.log("处理之后用户状态:" +userState)
+                    }
+                })
+                $('#stateButton').text("封禁该用户")
+            }
+        }
+    })
+}
+
+function publishError() {
+    var title = $('#title').val();
+    var description = $('#description').val();
+    var tag = $('#tag').val();
+    var userState = $('#userState').val();
+
+    if (title == ''){
+        alert('标题不能为空！');
+        return false;
+    }
+    if (description == ''){
+        alert('问题描述不能为空！');
+        return false;
+    }
+    if (tag == ''){
+        alert('标签不能为空！');
+        return false;
+    }
+    if (userState == 0){
+        alert('您的账号已被封禁，如有误封，请联系管理员！')
+        return false;
+    }
+
+}

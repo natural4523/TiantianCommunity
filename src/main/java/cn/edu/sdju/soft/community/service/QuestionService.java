@@ -7,6 +7,7 @@ import cn.edu.sdju.soft.community.exception.CustomizeErrorCode;
 import cn.edu.sdju.soft.community.exception.CustomizeException;
 import cn.edu.sdju.soft.community.mapper.QuestionExtMapper;
 import cn.edu.sdju.soft.community.mapper.QuestionMapper;
+import cn.edu.sdju.soft.community.mapper.UserExtMapper;
 import cn.edu.sdju.soft.community.mapper.UserMapper;
 import cn.edu.sdju.soft.community.model.Question;
 import cn.edu.sdju.soft.community.model.QuestionExample;
@@ -32,6 +33,9 @@ public class QuestionService {
 
     @Autowired
     private QuestionExtMapper questionExtMapper;
+
+    @Autowired
+    private UserExtMapper userExtMapper;
 
     public PaginationDTO list(String search,Long sectionId,Integer page, Integer size) {
         if (StringUtils.isNotBlank(search)){
@@ -159,7 +163,8 @@ public class QuestionService {
         QuestionDTO questionDTO = new QuestionDTO();
         BeanUtils.copyProperties(question,questionDTO);
         //根据Question对象里的creator查询到对应的user
-        User user = userMapper.selectByPrimaryKey(question.getCreator());
+        //User user = userMapper.selectByPrimaryKey(question.getCreator());
+        User user = userExtMapper.findByUserId(question.getCreator());
         //将user对象封装到QuestionDTO里去
         questionDTO.setUser(user);
         return questionDTO;
