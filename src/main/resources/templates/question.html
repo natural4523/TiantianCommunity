@@ -75,7 +75,7 @@
 
             <!--回复-->
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <input type="hidden" name="userId" id="userId" th:value="${session.user.id}">
+                <input th:if="${session.user != null}" type="hidden" name="userId" id="userId" th:value="${session.user.id}">
                 <h4>
                     <span th:text="${question.commentCount}"></span> 个回复
                 </h4>

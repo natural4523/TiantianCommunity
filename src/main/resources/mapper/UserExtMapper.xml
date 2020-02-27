@@ -125,4 +125,9 @@
     where ID = #{id}
   </update>
 
+  <update id="editUser" parameterType="cn.edu.sdju.soft.community.model.User">
+    update USER
+    set name = #{name},email = #{email} , AVATAR_URL=#{avatarUrl}
+    where id = #{id}
+  </update>
 </mapper>

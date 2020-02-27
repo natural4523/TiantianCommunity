@@ -12,12 +12,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.lang.reflect.Member;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -49,10 +52,10 @@ public class AuthorizeController {
     private UserService userService;
 
     @GetMapping("/callback")
-    public String callback(@RequestParam(name = "code")String code,
-                           @RequestParam(name = "state")String state,
+    public String callback(@RequestParam(name = "code") String code,
+                           @RequestParam(name = "state") String state,
                            HttpServletRequest request,
-                           HttpServletResponse response){
+                           HttpServletResponse response) {
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
         accessTokenDTO.setClient_id(clientId);
         accessTokenDTO.setClient_secret(clientSecret);
@@ -65,7 +68,7 @@ public class AuthorizeController {
         /*shift+F6替换所有user*/
         GithubUser githubUser = githubProvider.getUser(accessToken);
         /*当使用github登录成功时，获取用户信息，生成一个token，把token放入到用户对象里去，存储到数据库中，并且把token放到数据库里去*/
-        if(githubUser != null && githubUser.getId() != null){
+        if (githubUser != null && githubUser.getId() != null) {
             User user = new User();
             /*shift+回车直接切换到下一行*/
             String token = UUID.randomUUID().toString();
@@ -75,82 +78,82 @@ public class AuthorizeController {
             user.setAvatarUrl(githubUser.getAvatar_url());
             /*Ctrl+Alt+v抽取变量*/
             userService.createOrUpdate(user);
-            response.addCookie(new Cookie("token",token));
+            response.addCookie(new Cookie("token", token));
             return "redirect:/";
             //登录成功，写cookie对象和session
-        }else{
-            log.error("callback get github error,{}",githubUser);
+        } else {
+            log.error("callback get github error,{}", githubUser);
             return "redirect:/";
             //登录失败，重新登录
         }
     }
 
     @GetMapping("/logout")
-    public String logout(HttpServletRequest request,HttpServletResponse response){
+    public String logout(HttpServletRequest request, HttpServletResponse response) {
         /*session.removeAttribute("user");
         session.invalidate();*/
         request.getSession().removeAttribute("user");
-        Cookie cookie = new Cookie("user",null);
+        Cookie cookie = new Cookie("user", null);
         cookie.setMaxAge(0);
         response.addCookie(cookie);
         return "redirect:/";
     }
 
     @GetMapping("/toLogin")
-    public String toLogin(){
+    public String toLogin() {
         return "login";
     }
 
     @PostMapping("/login")
-    public String login(@RequestParam("username")String username,
+    public String login(@RequestParam("username") String username,
                         @RequestParam("password") String password,
-                        /*HttpSession session,*/
+            /*HttpSession session,*/
                         HttpServletResponse response,
-                        Model model){
-        User user = userService.findByUsername(username,password);
-        if (user == null){
-            model.addAttribute("error","登录失败，请重新登录！");
+                        Model model) {
+        User user = userService.findByUsername(username, password);
+        if (user == null) {
+            model.addAttribute("error", "登录失败，请重新登录！");
             return "login";
-        }else{
+        } else {
             /*session.setAttribute("user",user);*/
-            response.addCookie(new Cookie("user",username));
+            response.addCookie(new Cookie("user", username));
             return "redirect:/";
         }
 
     }
 
     @GetMapping("/toRegister")
-    public String toRegister(){
+    public String toRegister() {
         return "register";
     }
 
     @PostMapping("/register")
-    public String register(@RequestParam("username")String username,
-                           @RequestParam("password")String password,
-                           @RequestParam("name")String name,
-                           @RequestParam("email")String email,
-                           Model model){
+    public String register(@RequestParam("username") String username,
+                           @RequestParam("password") String password,
+                           @RequestParam("name") String name,
+                           @RequestParam("email") String email,
+                           Model model) {
         /*发布错误的时候，用来保存原先输入的信息*/
-        model.addAttribute("username",username);
-        model.addAttribute("password",password);
-        model.addAttribute("name",name);
+        model.addAttribute("username", username);
+        model.addAttribute("password", password);
+        model.addAttribute("name", name);
         model.addAttribute("email", email);
 
         /*校验*/
-        if (username == null || username == ""){
-            model.addAttribute("error","用户名不能为空");
+        if (username == null || username == "") {
+            model.addAttribute("error", "用户名不能为空");
             return "publish";
         }
-        if (password == null || password == ""){
-            model.addAttribute("error","密码不能为空");
+        if (password == null || password == "") {
+            model.addAttribute("error", "密码不能为空");
             return "publish";
         }
-        if (name == null || name == ""){
-            model.addAttribute("error","昵称不能为空");
+        if (name == null || name == "") {
+            model.addAttribute("error", "昵称不能为空");
             return "publish";
         }
         if (email == null || email == "") {
-            model.addAttribute("error","邮箱不能为空");
+            model.addAttribute("error", "邮箱不能为空");
             return "publish";
         }
 
@@ -167,5 +170,26 @@ public class AuthorizeController {
         return "login";
     }
 
+    @GetMapping("/toInformation")
+    public String toInformation() {
+        return "information";
+    }
 
+    @PostMapping("/editInformation")
+    public String editInformation(@RequestParam("id") long id,
+                                       @RequestParam("name") String name,
+                                       @RequestParam("email") String email,
+                                       @RequestParam("myfiles") MultipartFile myfiles,
+                                       HttpServletRequest request,
+                                       HttpServletResponse response,
+                                       Model model) {
+        User user = new User();
+        Map<String, Object> map = (Map<String, Object>) FileController.uploadApk(myfiles, request, response);//调用工具类，将文件上传。特别要注意的是  参数中的第一个参数。MultipartFile myfiles,    myfiles 的名称要和页面中 <input type="file" name="myfiles" /> 中的name名称保持一致，否则获取不到你上传的文件，文件上传成功后会返回一个MAP集合。
+        user.setAvatarUrl(map.get("path").toString());
+        user.setId(id);
+        user.setName(name);
+        user.setEmail(email);
+        userService.editUser(user);
+        return "redirect:/";
+    }
 }

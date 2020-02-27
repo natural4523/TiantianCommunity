@@ -64,4 +64,8 @@ public class UserService {
     public void unfreezeByUserId(long id) {
         userExtMapper.unfreezeByUserId(id);
     }
+
+    public void editUser(User user) {
+        userExtMapper.editUser(user);
+    }
 }
