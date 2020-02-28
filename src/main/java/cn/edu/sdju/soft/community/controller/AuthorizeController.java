@@ -192,4 +192,13 @@ public class AuthorizeController {
         userService.editUser(user);
         return "redirect:/";
     }
+
+    @GetMapping("/toBlacklist")
+    public String toBlacklist(Model model){
+        List<User> userList = userService.findFrozenUsers();
+        model.addAttribute("userList",userList);
+        return "blacklist";
+    }
+
+
 }

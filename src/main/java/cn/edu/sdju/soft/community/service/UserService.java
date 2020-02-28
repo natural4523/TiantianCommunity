@@ -68,4 +68,9 @@ public class UserService {
     public void editUser(User user) {
         userExtMapper.editUser(user);
     }
+
+    public List<User> findFrozenUsers() {
+        List<User> userList = userExtMapper.findFrozenUsers();
+        return userList;
+    }
 }

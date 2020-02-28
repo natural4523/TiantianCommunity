@@ -22,4 +22,6 @@ public interface UserExtMapper {
     void unfreezeByUserId(@Param("id") long id);
 
     void editUser(User user);
+
+    List<User> findFrozenUsers();
 }

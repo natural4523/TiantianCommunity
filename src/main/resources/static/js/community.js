@@ -251,5 +251,22 @@ function publishError() {
         alert('您的账号已被封禁，如有误封，请联系管理员！')
         return false;
     }
+}
+
+function unfreeze(e) {
+    var userId = e.getAttribute("data-id");
+    var userState = 0;
+
+    $.ajax({
+        type: "get",
+        url: "/unfreeze/" + userId,
+        contentType: "application/json",
+        dataType: "json",
+        success: function (data) {
+            userState = data.state;
+            console.log("处理之后用户状态:" +userState)
+        }
+    })
+    window.location.reload();
 
 }

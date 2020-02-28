@@ -48,7 +48,7 @@
                             <a href="/profile/replies">通知<span class="badge" th:text="${session.unreadCount}"></span></a>
                         </li>
                         <li th:if="${session.user != null and session.user.state == 2}">
-                            <a href="#">黑名单<span class="badge"></span></a>
+                            <a href="/toBlacklist">黑名单<span class="badge"></span></a>
                         </li>
                         <li th:if="${session.user == null}"><a href="/toRegister">注册</a></li>
                         <li class="dropdown" th:if="${session.user != null}">

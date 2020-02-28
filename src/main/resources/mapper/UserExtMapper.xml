@@ -130,4 +130,10 @@
     set name = #{name},email = #{email} , AVATAR_URL=#{avatarUrl}
     where id = #{id}
   </update>
+
+  <select id="findFrozenUsers" parameterType="cn.edu.sdju.soft.community.model.User"  resultMap="BaseResultMap">
+    select *
+    from USER
+    where state = 0
+  </select>
 </mapper>
