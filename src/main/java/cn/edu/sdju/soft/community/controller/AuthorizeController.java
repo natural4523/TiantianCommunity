@@ -2,6 +2,7 @@ package cn.edu.sdju.soft.community.controller;
 
 import cn.edu.sdju.soft.community.dto.AccessTokenDTO;
 import cn.edu.sdju.soft.community.dto.GithubUser;
+import cn.edu.sdju.soft.community.dto.PaginationDTO;
 import cn.edu.sdju.soft.community.mapper.UserMapper;
 import cn.edu.sdju.soft.community.model.User;
 import cn.edu.sdju.soft.community.provider.GithubProvider;
@@ -194,9 +195,11 @@ public class AuthorizeController {
     }
 
     @GetMapping("/toBlacklist")
-    public String toBlacklist(Model model){
-        List<User> userList = userService.findFrozenUsers();
-        model.addAttribute("userList",userList);
+    public String toBlacklist(@RequestParam(name = "page",defaultValue = "1")Integer page,
+                              @RequestParam(name = "size",defaultValue = "5")Integer size,
+                              Model model){
+        PaginationDTO pagination = userService.findFrozenUsers(page,size);
+        model.addAttribute("pagination",pagination);
         return "blacklist";
     }
 

@@ -1,5 +1,6 @@
 package cn.edu.sdju.soft.community.service;
 
+import cn.edu.sdju.soft.community.dto.PaginationDTO;
 import cn.edu.sdju.soft.community.mapper.UserExtMapper;
 import cn.edu.sdju.soft.community.mapper.UserMapper;
 import cn.edu.sdju.soft.community.model.User;
@@ -69,8 +70,39 @@ public class UserService {
         userExtMapper.editUser(user);
     }
 
-    public List<User> findFrozenUsers() {
-        List<User> userList = userExtMapper.findFrozenUsers();
-        return userList;
+    public PaginationDTO findFrozenUsers(Integer page, Integer size) {
+        PaginationDTO paginationDTO = new PaginationDTO();
+        Integer totalPage;
+        Integer totalCount = userExtMapper.countFrozenUsers();
+
+        if (totalCount % size == 0){
+            totalPage = totalCount / size;
+        }else {
+            totalPage = totalCount / size + 1;
+        }
+
+        if (page < 1){
+            page = 1;
+        }
+
+        if (page > totalPage){
+            page = totalPage;
+        }
+
+        if(page == 0){
+            page = 1;
+        }
+        paginationDTO.setPagination(totalPage,page);
+
+        Integer offset = size * (page - 1);
+
+        List<User> userList = userExtMapper.findFrozenUsers(size,offset);
+        paginationDTO.setData(userList);
+        return paginationDTO;
     }
+
+    /*public List<User> findFrozenUsers(Integer page,Integer size) {
+        List<User> userList = userExtMapper.findFrozenUsers(page,size);
+        return userList;
+    }*/
 }

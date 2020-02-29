@@ -23,5 +23,7 @@ public interface UserExtMapper {
 
     void editUser(User user);
 
-    List<User> findFrozenUsers();
+    Integer countFrozenUsers();
+
+    List<User> findFrozenUsers(@Param("size") Integer size, @Param("offset") Integer offset);
 }

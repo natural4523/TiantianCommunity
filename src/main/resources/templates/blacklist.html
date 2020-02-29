@@ -39,7 +39,7 @@
                             <td>操作</td>
                         </tr>
                     </thead>
-                    <tbody th:each="user:${userList}">
+                    <tbody th:each="user:${pagination.data}">
                         <tr>
                             <td th:text="${user.username}"></td>
                             <td th:text="${user.name}"></td>
@@ -49,6 +49,35 @@
                         </tr>
                     </tbody>
                 </table>
+                <nav aria-label="Page navigation">
+                    <ul class="pagination">
+                        <li th:if="${pagination.showFirstPage}">
+                            <a th:href="@{/toBlacklist(page=1)}" aria-label="Previous">
+                                <span aria-hidden="true">&lt;&lt;</span>
+                            </a>
+                        </li>
+                        <li th:if="${pagination.showPrevious}">
+                            <a th:href="@{/toBlacklist(page=${pagination.page - 1})}" aria-label="Previous">
+                                <span aria-hidden="true">&lt;</span>
+                            </a>
+                        </li>
+
+                        <li th:each="page:${pagination.pages}"  th:class="${pagination.page == page}?'active':''" >
+                            <a th:href="@{/toBlacklist(page=${page})}"  th:text="${page}"></a></li>
+
+                        <li th:if="${pagination.showNext}">
+                            <a th:href="@{/toBlacklist(page=${pagination.page + 1})}" aria-label="Next">
+                                <span aria-hidden="true">&gt;</span>
+                            </a>
+                        </li>
+                        <li th:if="${pagination.showEndPage}">
+                            <a th:href="@{/toBlacklist(page=${pagination.totalPage})}" aria-label="Previous">
+                                <span aria-hidden="true">&gt;&gt;</span>
+                            </a>
+                        </li>
+
+                    </ul>
+                </nav>
             </div>
         </div>
     </div>

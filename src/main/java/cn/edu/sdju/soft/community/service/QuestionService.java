@@ -52,7 +52,6 @@ public class QuestionService {
         questionQueryDTO.setSectionId(sectionId);
         Integer totalCount = questionExtMapper.countBySearch(questionQueryDTO);
 
-
         if (totalCount % size == 0){
             totalPage = totalCount / size;
         }else {
