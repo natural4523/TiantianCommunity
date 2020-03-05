@@ -143,4 +143,15 @@
     where state = 0
     limit #{offset},#{size}
   </select>
+
+  <update id="editPassword" parameterType="cn.edu.sdju.soft.community.model.User">
+    update USER
+    set password = #{password}
+    where id = #{id}
+  </update>
+
+  <select id="findByUsername1" parameterType="cn.edu.sdju.soft.community.model.User" resultMap="BaseResultMap">
+    select * from USER where username = #{username}
+  </select>
+
 </mapper>

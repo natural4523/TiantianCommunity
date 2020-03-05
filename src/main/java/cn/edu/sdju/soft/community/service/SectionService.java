@@ -18,4 +18,17 @@ public class SectionService {
         List<Section> sectionList = sectionExtMapper.findAllSections();
         return sectionList;
     }
+
+
+    public void addSection(Section section) {
+        sectionExtMapper.addSection(section);
+    }
+
+    public void editSection(Section section) {
+        sectionExtMapper.editSection(section);
+    }
+
+    public void deleteSection(Long sectionId) {
+        sectionExtMapper.deleteSection(sectionId);
+    }
 }

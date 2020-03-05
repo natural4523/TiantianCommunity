@@ -3,9 +3,12 @@ package cn.edu.sdju.soft.community.controller;
 import cn.edu.sdju.soft.community.dto.AccessTokenDTO;
 import cn.edu.sdju.soft.community.dto.GithubUser;
 import cn.edu.sdju.soft.community.dto.PaginationDTO;
-import cn.edu.sdju.soft.community.mapper.UserMapper;
+import cn.edu.sdju.soft.community.model.CheckQuestions;
 import cn.edu.sdju.soft.community.model.User;
+import cn.edu.sdju.soft.community.model.UserCheckQuestion;
 import cn.edu.sdju.soft.community.provider.GithubProvider;
+import cn.edu.sdju.soft.community.service.CheckQuestionsService;
+import cn.edu.sdju.soft.community.service.UserCheckQuestionService;
 import cn.edu.sdju.soft.community.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +18,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.jws.WebParam;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.lang.reflect.Member;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -51,6 +53,12 @@ public class AuthorizeController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private CheckQuestionsService checkQuestionsService;
+
+    @Autowired
+    private UserCheckQuestionService userCheckQuestionService;
 
     @GetMapping("/callback")
     public String callback(@RequestParam(name = "code") String code,
@@ -124,7 +132,13 @@ public class AuthorizeController {
     }
 
     @GetMapping("/toRegister")
-    public String toRegister() {
+    public String toRegister(Model model) {
+        List<CheckQuestions> checkQuestionsList1 = checkQuestionsService.findPartCheckQuestions1();
+        List<CheckQuestions> checkQuestionsList2 =checkQuestionsService.findPartCheckQuestions2();
+        List<CheckQuestions> checkQuestionsList3 =checkQuestionsService.findPartCheckQuestions3();
+        model.addAttribute("checkQuestionsList1",checkQuestionsList1);
+        model.addAttribute("checkQuestionsList2",checkQuestionsList2);
+        model.addAttribute("checkQuestionsList3",checkQuestionsList3);
         return "register";
     }
 
@@ -133,6 +147,12 @@ public class AuthorizeController {
                            @RequestParam("password") String password,
                            @RequestParam("name") String name,
                            @RequestParam("email") String email,
+                           @RequestParam("checkQuestion1")Long checkQuestion1,
+                           @RequestParam("checkAnswer1")String checkAnswer1,
+                           @RequestParam("checkQuestion2")Long checkQuestion2,
+                           @RequestParam("checkAnswer2")String checkAnswer2,
+                           @RequestParam("checkQuestion3")Long checkQuestion3,
+                           @RequestParam("checkAnswer3")String checkAnswer3,
                            Model model) {
         /*发布错误的时候，用来保存原先输入的信息*/
         model.addAttribute("username", username);
@@ -168,6 +188,24 @@ public class AuthorizeController {
         user.setAvatarUrl("/images/default-avatar.png");
         userService.createUser(user);
 
+        User user1 = userService.findByUsername1(username);
+        UserCheckQuestion userCheckQuestion1 = new UserCheckQuestion();
+        userCheckQuestion1.setUserId(user1.getId());
+        userCheckQuestion1.setQuestion(checkQuestion1);
+        userCheckQuestion1.setAnswer(checkAnswer1);
+        userCheckQuestionService.createUserCheckQuestion(userCheckQuestion1);
+
+        UserCheckQuestion userCheckQuestion2 = new UserCheckQuestion();
+        userCheckQuestion2.setUserId(user1.getId());
+        userCheckQuestion2.setQuestion(checkQuestion2);
+        userCheckQuestion2.setAnswer(checkAnswer2);
+        userCheckQuestionService.createUserCheckQuestion(userCheckQuestion2);
+
+        UserCheckQuestion userCheckQuestion3 = new UserCheckQuestion();
+        userCheckQuestion3.setUserId(user1.getId());
+        userCheckQuestion3.setQuestion(checkQuestion3);
+        userCheckQuestion3.setAnswer(checkAnswer3);
+        userCheckQuestionService.createUserCheckQuestion(userCheckQuestion3);
         return "login";
     }
 
@@ -182,8 +220,7 @@ public class AuthorizeController {
                                        @RequestParam("email") String email,
                                        @RequestParam("myfiles") MultipartFile myfiles,
                                        HttpServletRequest request,
-                                       HttpServletResponse response,
-                                       Model model) {
+                                       HttpServletResponse response) {
         User user = new User();
         Map<String, Object> map = (Map<String, Object>) FileController.uploadApk(myfiles, request, response);//调用工具类，将文件上传。特别要注意的是  参数中的第一个参数。MultipartFile myfiles,    myfiles 的名称要和页面中 <input type="file" name="myfiles" /> 中的name名称保持一致，否则获取不到你上传的文件，文件上传成功后会返回一个MAP集合。
         user.setAvatarUrl(map.get("path").toString());
@@ -203,5 +240,66 @@ public class AuthorizeController {
         return "blacklist";
     }
 
+    @GetMapping("/toEditPassword")
+    public String toEditPassword(){
+        return "editpassword";
+    }
+
+    @PostMapping("/editPassword")
+    public String editPassword(@RequestParam("id")Long id,
+                               @RequestParam("newPassword")String newPassword){
+        User user = new User();
+        user.setId(id);
+        user.setPassword(newPassword);
+        userService.editPassword(user);
+        return "redirect:/";
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/checkOgnPassword/{id}",method = RequestMethod.GET)
+    public User checkOgnPassword(@PathVariable("id")Long id){
+        User user = userService.findByUserId(id);
+        return user;
+    }
+
+    @PostMapping("/toCheckUser")
+    public String toCheckUser(@RequestParam("username")String username,Model model){
+        User user = userService.findByUsername1(username);
+        List<UserCheckQuestion> userCheckQuestionList = userCheckQuestionService.findCheckQuestionByUserId(user.getId());
+        UserCheckQuestion userCheckQuestion1 = userCheckQuestionList.get(0);
+        UserCheckQuestion userCheckQuestion2 = userCheckQuestionList.get(1);
+        UserCheckQuestion userCheckQuestion3 = userCheckQuestionList.get(2);
+        model.addAttribute("checkQuestion1", userCheckQuestion1);
+        model.addAttribute("checkQuestion2", userCheckQuestion2);
+        model.addAttribute("checkQuestion3", userCheckQuestion3);
+        return "checkuser";
+    }
+
+    @PostMapping("/toResetPassword")
+    public String toResetPassword(@RequestParam("checkQuestion1")Long checkQuestion1,
+                                  @RequestParam("checkAnswer1")String checkAnswer1,
+                                  @RequestParam("checkQuestion2")Long checkQuestion2,
+                                  @RequestParam("checkAnswer2")String checkAnswer2,
+                                  @RequestParam("checkQuestion3")Long checkQuestion3,
+                                  @RequestParam("checkAnswer3")String checkAnswer3,
+                                  Model model){
+        UserCheckQuestion userCheckQuestion1 = userCheckQuestionService.findCheckQuestion(checkQuestion1,checkAnswer1);
+        UserCheckQuestion userCheckQuestion2 = userCheckQuestionService.findCheckQuestion(checkQuestion2, checkAnswer2);
+        UserCheckQuestion userCheckQuestion3 = userCheckQuestionService.findCheckQuestion(checkQuestion3, checkAnswer3);
+        if (userCheckQuestion1 == null){
+            model.addAttribute("error","验证问题一的答案有误，请重新输入！");
+            return "checkuser";
+        }
+        if (userCheckQuestion2 == null){
+            model.addAttribute("error","验证问题二的答案有误，请重新输入！");
+            return "checkuser";
+        }
+        if (userCheckQuestion3 == null){
+            model.addAttribute("error","验证问题三的答案有误，请重新输入！");
+            return "checkuser";
+        }
+
+        return "resetpassword";
+    }
 
 }

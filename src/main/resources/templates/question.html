@@ -181,7 +181,7 @@
                     </div>
                     <div th:unless="${session.user == null}" >
                         <button th:if="${session.user.state == 2}" th:data-id="${question.user.id}"
-                                id="stateButton" onclick="freezeOrUnfreeze(this)" type="button" class="btn btn-danger">封禁该用户</button>
+                                id="stateButton" onclick="freezeOrUnfreeze(this)" type="button" class="btn btn-danger" th:text="${question.user.state == 1 ?'封禁该用户':'解封该用户'}"></button>
                     </div>
                 </div>
             </div>

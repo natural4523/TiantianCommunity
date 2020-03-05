@@ -12,4 +12,53 @@
     <select id="findAllSections" parameterType="cn.edu.sdju.soft.community.model.Section" resultMap="BaseResultMap">
         select * from SECTION
     </select>
+
+    <insert id="addSection" parameterType="cn.edu.sdju.soft.community.model.Section">
+        insert into SECTION
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="gmtCreate != null">
+                GMT_CREATE,
+            </if>
+            <if test="gmtModified != null">
+                GMT_MODIFIED,
+            </if>
+            <if test="creator != null">
+                creator,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="gmtCreate != null">
+                #{gmtCreate,jdbcType=BIGINT},
+            </if>
+            <if test="gmtModified != null">
+                #{gmtModified,jdbcType=BIGINT},
+            </if>
+            <if test="creator != null">
+                #{creator,jdbcType=BIGINT},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="editSection" parameterType="cn.edu.sdju.soft.community.model.Section">
+        update section
+        set name = #{name},GMT_MODIFIED = #{gmtModified}
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSection" parameterType="cn.edu.sdju.soft.community.model.Section">
+        delete from section
+        where id = #{sectionId}
+    </delete>
 </mapper>

@@ -1,6 +1,6 @@
 package cn.edu.sdju.soft.community.model;
 
-import java.math.BigInteger;
+
 
 public class Question {
     /**

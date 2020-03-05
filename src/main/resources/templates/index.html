@@ -41,6 +41,111 @@
                     th:class="${section.id == sectionId ? 'active':''}">
                     <a th:href="@{/(sectionId=${section.id})}" th:text="${section.name}"></a>
                 </li>
+                <li>
+                    <!--添加版块-->
+                    <li style="font-size: smaller" th:if="${session.user != null}">
+                        <a href="#" th:unless="${session.user.state != 2}">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true" data-toggle="modal" data-target="#myModal"></span>
+                        </a>
+                        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h4 style="text-align: center" class="modal-title" id="myModalLabel">添加版块</h4>
+                                    </div>
+                                    <form class="form-horizontal" action="/addSection" method="post">
+                                        <input type="hidden" name="id" th:value="${session.user == null?null:session.user.id}">
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <label for="name" style="font-size: medium;" class="col-sm-2 control-label">版块名称:</label>
+                                                <div class="col-sm-10" style="width: 30%">
+                                                    <input type="text" class="form-control" id="name" name="name">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                            <button type="submit" class="btn btn-primary">提交更改</button>
+                                        </div>
+                                    </form>
+                                </div><!-- /.modal-content -->
+                            </div><!-- /.modal -->
+                        </div>
+                    </li>
+                    <!--编辑版块-->
+                    <li style="font-size: smaller" th:if="${session.user != null}">
+                        <a href="#" th:unless="${session.user.state != 2}">
+                            <span class="glyphicon glyphicon-edit" aria-hidden="true" data-toggle="modal" data-target="#myModal1"></span>
+                        </a>
+                        <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h4 style="text-align: center" class="modal-title" id="myModal1Label">修改版块</h4>
+                                    </div>
+                                    <form class="form-horizontal" action="/editSection" method="post">
+                                        <div class="modal-body">
+                                            <div class="form-group form-inline" >
+                                                <label for="sectionId" style="font-size: medium;margin-left: 5%">
+                                                    需要修改的版块名称:
+                                                </label>
+                                                <select class="form-control" id="sectionId" th:name="sectionId" style="width: 30%;margin-left: 5%">
+                                                    <option th:each="section:${sectionList}" th:value="${section.id}" th:text="${section.name}"
+                                                            th:selected="${section.id} == ${sectionId}"></option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="name" style="font-size: medium;margin-left: 2.5%" class="col-sm-2 control-label">版块名称:</label>
+                                                <div class="col-sm-10" style="width: 30%">
+                                                    <input type="text" class="form-control" placeholder="修改为..." name="name">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                            <button type="submit" class="btn btn-primary">提交更改</button>
+                                        </div>
+                                    </form>
+                                </div><!-- /.modal-content -->
+                            </div><!-- /.modal -->
+                        </div>
+                    </li>
+                    <!--删除版块-->
+                    <li style="font-size: smaller" th:if="${session.user != null}">
+                        <a href="#" th:unless="${session.user.state != 2}">
+                            <span class="glyphicon glyphicon-minus" aria-hidden="true" data-toggle="modal" data-target="#myModal2"></span>
+                        </a>
+                        <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h4 style="text-align: center" class="modal-title" id="myModal2Label">删除版块</h4>
+                                    </div>
+                                    <form class="form-horizontal" action="/deleteSection" method="post">
+                                        <div class="modal-body">
+                                            <div class="form-group form-inline" >
+                                                <label for="sectionId" style="font-size: medium;margin-left: 5%">
+                                                    需要修改的版块名称:
+                                                </label>
+                                                <select class="form-control" th:name="sectionId" style="width: 30%;margin-left: 5%">
+                                                    <option th:each="section:${sectionList}" th:value="${section.id}" th:text="${section.name}"
+                                                            th:selected="${section.id} == ${sectionId}"></option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                            <button type="submit" class="btn btn-primary">提交更改</button>
+                                        </div>
+                                    </form>
+                                </div><!-- /.modal-content -->
+                            </div><!-- /.modal -->
+                        </div>
+                    </li>
+                </li>
             </ul>
 
             <div class="media" th:each="question:${pagination.data}">

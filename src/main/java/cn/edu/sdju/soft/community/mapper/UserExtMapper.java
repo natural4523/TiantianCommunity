@@ -1,5 +1,6 @@
 package cn.edu.sdju.soft.community.mapper;
 
+import cn.edu.sdju.soft.community.model.CheckQuestions;
 import cn.edu.sdju.soft.community.model.User;
 import cn.edu.sdju.soft.community.model.UserExample;
 import org.apache.ibatis.annotations.Param;
@@ -26,4 +27,9 @@ public interface UserExtMapper {
     Integer countFrozenUsers();
 
     List<User> findFrozenUsers(@Param("size") Integer size, @Param("offset") Integer offset);
+
+    void editPassword(User user);
+
+    User findByUsername1(@Param("username") String username);
+
 }

@@ -3,6 +3,7 @@ package cn.edu.sdju.soft.community.service;
 import cn.edu.sdju.soft.community.dto.PaginationDTO;
 import cn.edu.sdju.soft.community.mapper.UserExtMapper;
 import cn.edu.sdju.soft.community.mapper.UserMapper;
+import cn.edu.sdju.soft.community.model.CheckQuestions;
 import cn.edu.sdju.soft.community.model.User;
 import cn.edu.sdju.soft.community.model.UserExample;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,8 +102,14 @@ public class UserService {
         return paginationDTO;
     }
 
-    /*public List<User> findFrozenUsers(Integer page,Integer size) {
-        List<User> userList = userExtMapper.findFrozenUsers(page,size);
-        return userList;
-    }*/
+    public void editPassword(User user) {
+        userExtMapper.editPassword(user);
+    }
+
+    public User findByUsername1(String username) {
+        User user  = userExtMapper.findByUsername1(username);
+        return user;
+    }
+
+
 }

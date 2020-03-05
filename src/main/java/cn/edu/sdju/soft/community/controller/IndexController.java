@@ -1,11 +1,7 @@
 package cn.edu.sdju.soft.community.controller;
 
 import cn.edu.sdju.soft.community.dto.PaginationDTO;
-import cn.edu.sdju.soft.community.dto.QuestionDTO;
-import cn.edu.sdju.soft.community.mapper.UserMapper;
-import cn.edu.sdju.soft.community.model.Question;
 import cn.edu.sdju.soft.community.model.Section;
-import cn.edu.sdju.soft.community.model.User;
 import cn.edu.sdju.soft.community.service.QuestionService;
 import cn.edu.sdju.soft.community.service.SectionService;
 import org.springframework.beans.factory.annotation.Autowired;

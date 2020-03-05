@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.sdju.soft.community.mapper.CheckQuestionsExtMapper">
+    <resultMap id="BaseResultMap" type="cn.edu.sdju.soft.community.model.CheckQuestions">
+        <id column="ID" jdbcType="INTEGER" property="id" />
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+    </resultMap>
+
+    <select id="findPartCheckQuestions1" parameterType="cn.edu.sdju.soft.community.model.CheckQuestions" resultMap="BaseResultMap">
+        select * from CHECKQUESTIONS LIMIT 0,5
+    </select>
+
+    <select id="findPartCheckQuestions2" parameterType="cn.edu.sdju.soft.community.model.CheckQuestions" resultMap="BaseResultMap">
+        select * from CHECKQUESTIONS LIMIT 5,5
+    </select>
+
+    <select id="findPartCheckQuestions3" parameterType="cn.edu.sdju.soft.community.model.CheckQuestions" resultMap="BaseResultMap">
+        select * from CHECKQUESTIONS LIMIT 10,5
+    </select>
+
+    <select id="findCheckQuestionByUserId" parameterType="cn.edu.sdju.soft.community.model.CheckQuestions" resultMap="BaseResultMap">
+        select * from CHECKQUESTIONS where id = #{id}
+    </select>
+</mapper>
