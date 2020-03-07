@@ -39,10 +39,18 @@
                         <span class="text-desc"><span th:text="${question.commentCount}"></span> 个回复 •
                         <span th:text="${question.viewCount}"></span> 次浏览 •
                         <span th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd HH:mm')}"></span> •
-                         <a th:href="@{'/publish/' + ${question.id}}" class="community-menu"
-                            th:if="${session.user != null && session.user.id == question.creator}">
-                        <span class="glyphicon glyphicon-pencil" aria-hidden="true">编辑</span>
-                    </a>
+                        <a th:href="@{'/publish/' + ${question.id}}" class="community-menu"
+                           th:if="${session.user != null && session.user.id == question.creator}">
+                            <span class="glyphicon glyphicon-pencil" aria-hidden="true">编辑</span>
+                         </a>•
+                        <span id="delete">
+                             <a th:href="@{'/deleteMyQuestion/' + ${question.id}}" class="community-menu"
+                                th:if="${session.user != null && session.user.id == question.creator}" >
+                                <span class="glyphicon glyphicon-remove-circle"  aria-hidden="true">删除</span>
+                            </a>
+                        </span>
+
+
                     </span>
                     </div>
                 </div>
@@ -108,3 +116,12 @@
 <div th:insert="footer :: foot"></div>
 </body>
 </html>
+
+<script>
+    $(function () {
+        $("#delete").click(function (t) {
+            console.log("111")
+            alert("删除成功！")
+        })
+    })
+</script>

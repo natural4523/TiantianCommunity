@@ -97,6 +97,16 @@
                                 <span th:data-id="${comment.id}" onclick="collapseComments(this)" class="comment-icon">
                                     <span class="glyphicon glyphicon-comment"></span>
                                     <span th:text="${comment.commentCount}"></span>
+                                </span>&nbsp;
+                                <span class="comment-icon" th:if="${session.user != null && session.user.state == 2}" id="deleteOtherComment">
+                                    <a th:href="@{'/deleteComment/' + ${comment.id}}" class="community-menu">
+                                        <span class="glyphicon glyphicon-remove-circle"  aria-hidden="true">删除评论</span>
+                                    </a>
+                                </span>
+                                <span class="comment-icon" th:if="${session.user != null && comment.user.id == session.user.id && session.user.state != 2}" id="deleteMyComment">
+                                    <a th:href="@{'/deleteComment/' + ${comment.id}}" class="community-menu">
+                                        <span class="glyphicon glyphicon-remove-circle"  aria-hidden="true">删除评论</span>
+                                    </a>
                                 </span>
 
                                 <span class="pull-right"
@@ -179,10 +189,8 @@
                             <span th:text="${question.user.name}"></span>
                         </h5>
                     </div>
-                    <div th:unless="${session.user == null}" >
-                        <button th:if="${session.user.state == 2}" th:data-id="${question.user.id}"
-                                id="stateButton" onclick="freezeOrUnfreeze(this)" type="button" class="btn btn-danger" th:text="${question.user.state == 1 ?'封禁该用户':'解封该用户'}"></button>
-                    </div>
+                    <button th:if="${session.user != null && session.user.state == 2 && question.user.state != 2}" th:data-id="${question.user.id}"
+                            id="stateButton" onclick="freezeOrUnfreeze(this)" type="button" class="btn btn-danger" th:text="${question.user.state == 1 ?'封禁该用户':'解封该用户'}"></button>
                 </div>
             </div>
 

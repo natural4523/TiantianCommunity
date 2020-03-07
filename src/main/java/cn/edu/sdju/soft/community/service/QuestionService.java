@@ -231,4 +231,8 @@ public class QuestionService {
         }).collect(Collectors.toList());
         return questionDTOS;
     }
+
+    public void deleteMyQuestion(Long id) {
+        questionExtMapper.deleteMyQuestion(id);
+    }
 }

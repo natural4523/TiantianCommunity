@@ -43,8 +43,8 @@
                 </li>
                 <li>
                     <!--添加版块-->
-                    <li style="font-size: smaller" th:if="${session.user != null}">
-                        <a href="#" th:unless="${session.user.state != 2}">
+                    <li style="font-size: smaller" th:if="${session.user != null && session.user.state == 2}">
+                        <a href="#">
                             <span class="glyphicon glyphicon-plus" aria-hidden="true" data-toggle="modal" data-target="#myModal"></span>
                         </a>
                         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -74,8 +74,8 @@
                         </div>
                     </li>
                     <!--编辑版块-->
-                    <li style="font-size: smaller" th:if="${session.user != null}">
-                        <a href="#" th:unless="${session.user.state != 2}">
+                    <li style="font-size: smaller" th:if="${session.user != null && session.user.state == 2}">
+                        <a href="#" >
                             <span class="glyphicon glyphicon-edit" aria-hidden="true" data-toggle="modal" data-target="#myModal1"></span>
                         </a>
                         <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -113,8 +113,8 @@
                         </div>
                     </li>
                     <!--删除版块-->
-                    <li style="font-size: smaller" th:if="${session.user != null}">
-                        <a href="#" th:unless="${session.user.state != 2}">
+                    <li style="font-size: smaller" th:if="${session.user != null && session.user.state == 2}">
+                        <a href="#">
                             <span class="glyphicon glyphicon-minus" aria-hidden="true" data-toggle="modal" data-target="#myModal2"></span>
                         </a>
                         <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -161,8 +161,15 @@
                     <span class="text-desc">
                         <span th:text="${question.user.name}"></span> •
                         <span th:text="${question.commentCount}"></span> 个回复 •
-                        <span th:text="${question.viewCount}"></span> 次浏览 •
+                        <span th:text="${question.viewCount}"></span> 次浏览
                         <span th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd HH:mm')}"></span></span>
+                        <span th:if="${session.user != null && session.user.state == 2}" id="deleteQuestion">
+                            •
+                            <a th:href="@{'/deleteOtherQuestion/' + ${question.id}}" class="community-menu">
+                                <span class="glyphicon glyphicon-remove-circle"  aria-hidden="true">删除</span>
+                            </a>
+                        </span>
+
                 </div>
             </div>
             <nav aria-label="Page navigation">
@@ -202,4 +209,12 @@
 </div>
 <div th:insert="footer :: foot"></div>
 </body>
-    </html>
+</html>
+
+<script>
+    $(function () {
+        $("#deleteQuestion").click(function (t) {
+            alert("删除成功！")
+        })
+    })
+</script>

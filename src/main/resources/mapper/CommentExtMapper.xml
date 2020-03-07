@@ -24,4 +24,15 @@
     COMMENT_COUNT = COMMENT_COUNT + #{commentCount,jdbcType=INTEGER}
     where id = #{id}
   </update>
+
+  <delete id="deleteComment" parameterType="cn.edu.sdju.soft.community.model.Comment">
+    delete from COMMENT
+        where id = #{id}
+  </delete>
+
+  <select id="findByCommentId" parameterType="cn.edu.sdju.soft.community.model.Comment" resultMap="BaseResultMap">
+    select *
+    from COMMENT
+    where ID = #{id}
+  </select>
 </mapper>

@@ -56,4 +56,9 @@
     order by gmt_create desc
     limit #{page},#{size}
   </select>
+
+  <delete id="deleteMyQuestion" parameterType="cn.edu.sdju.soft.community.model.Question">
+    delete from QUESTION
+        where id = #{id}
+  </delete>
 </mapper>

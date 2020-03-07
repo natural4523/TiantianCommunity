@@ -151,4 +151,13 @@ public class CommentService {
 
         return commentDTOS;
     }
+
+    public void deleteComment(Long id) {
+        commentExtMapper.deleteComment(id);
+    }
+
+    public Comment findByCommentId(Long id) {
+        Comment comment = commentExtMapper.findByCommentId(id);
+        return comment;
+    }
 }

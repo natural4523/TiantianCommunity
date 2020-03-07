@@ -298,8 +298,19 @@ public class AuthorizeController {
             model.addAttribute("error","验证问题三的答案有误，请重新输入！");
             return "checkuser";
         }
-
+        Long userId = userCheckQuestion1.getUserId();
+        model.addAttribute("id",userId);
         return "resetpassword";
+    }
+
+    @PostMapping("/resetPassword")
+    public String resetPassword(@RequestParam("id")Long id,
+                                @RequestParam("newPassword")String newPassword){
+        User user = new User();
+        user.setId(id);
+        user.setPassword(newPassword);
+        userService.editPassword(user);
+        return "login";
     }
 
 }

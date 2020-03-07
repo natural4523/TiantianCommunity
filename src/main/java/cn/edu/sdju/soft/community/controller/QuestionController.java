@@ -62,4 +62,16 @@ public class QuestionController {
         User user = userService.findByUserId(id);
         return user;
     }
+
+    @GetMapping("/deleteMyQuestion/{id}")
+    public String deleteMyQuestion(@PathVariable("id")Long id){
+        questionService.deleteMyQuestion(id);
+        return "redirect:/profile/questions";
+    }
+
+    @GetMapping("/deleteOtherQuestion/{id}")
+    public String deleteOtherQuestion(@PathVariable("id")Long id){
+        questionService.deleteMyQuestion(id);
+        return "redirect:/";
+    }
 }

@@ -480,5 +480,6 @@
     <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
+    order by gmt_create desc
   </select>
 </mapper>
