@@ -22,6 +22,7 @@ import javax.jws.WebParam;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -121,9 +122,12 @@ public class AuthorizeController {
                         Model model) {
         User user = userService.findByUsername(username, password);
         if (user == null) {
-            model.addAttribute("error", "登录失败，请重新登录！");
+            model.addAttribute("error", "账号或密码错误，请重新登录！");
             return "login";
-        } else {
+        } else if (user.getState() == 0){
+            model.addAttribute("error","您的账户已被冻结！");
+            return "login";
+        }else {
             /*session.setAttribute("user",user);*/
             response.addCookie(new Cookie("user", username));
             return "redirect:/";
@@ -222,8 +226,13 @@ public class AuthorizeController {
                                        HttpServletRequest request,
                                        HttpServletResponse response) {
         User user = new User();
-        Map<String, Object> map = (Map<String, Object>) FileController.uploadApk(myfiles, request, response);//调用工具类，将文件上传。特别要注意的是  参数中的第一个参数。MultipartFile myfiles,    myfiles 的名称要和页面中 <input type="file" name="myfiles" /> 中的name名称保持一致，否则获取不到你上传的文件，文件上传成功后会返回一个MAP集合。
-        user.setAvatarUrl(map.get("path").toString());
+        if (myfiles.getSize() != 0){
+            Map<String, Object> map = (Map<String, Object>) FileController.uploadApk(myfiles, request, response);//调用工具类，将文件上传。特别要注意的是  参数中的第一个参数。MultipartFile myfiles,    myfiles 的名称要和页面中 <input type="file" name="myfiles" /> 中的name名称保持一致，否则获取不到你上传的文件，文件上传成功后会返回一个MAP集合。
+            user.setAvatarUrl(map.get("path").toString());
+        }else {
+            String ognAvatarUrl = userService.findAvatarUrlById(id);
+            user.setAvatarUrl(ognAvatarUrl);
+        }
         user.setId(id);
         user.setName(name);
         user.setEmail(email);
@@ -313,4 +322,23 @@ public class AuthorizeController {
         return "login";
     }
 
+    /*@ResponseBody
+    @RequestMapping(value = "/checkLogin",method = RequestMethod.POST)
+    public User checkLogin(@RequestBody String username,
+                           @RequestBody String password){
+        User user = userService.findByUsername(username,password);
+        return user;
+    }*/
+
+    @ResponseBody
+    @RequestMapping(value = "/checkUsername/{username}",method = RequestMethod.GET)
+    public boolean checkUsername(@PathVariable("username")String username){
+        User user = userService.findByUsername1(username);
+        if (user == null){
+            return true;
+        }else {
+            return false;
+        }
+
+    }
 }

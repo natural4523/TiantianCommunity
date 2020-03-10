@@ -160,4 +160,8 @@ public class CommentService {
         Comment comment = commentExtMapper.findByCommentId(id);
         return comment;
     }
+
+    public void thumbsUp(Long id) {
+        commentExtMapper.thumbsUp(id);
+    }
 }

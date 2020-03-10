@@ -28,7 +28,7 @@
 <div class="container-fluid main profile">
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <h2 style="margin-left: 46%;margin-top: 120px">编辑个人信息</h2>
+            <h2 style="margin-left: 46%;margin-top: 100px">编辑个人信息</h2>
 
             <form style="margin-top: 2%;margin-bottom: 10%;margin-left: 30%" class="form-horizontal" action="/editInformation"  enctype="multipart/form-data" method="post">
                 <input type="hidden" name="id" th:value="${session.user.id}">
@@ -46,11 +46,12 @@
                 </div>
 
                 <div class="form-group">
-                    <div class="input-group col-md-4">
+                    <label for="myfiles" class="col-sm-2 control-label">上传头像</label>
+                    <div class="input-group col-sm-10" style="width: 30%">
                         <span class="input-group-addon">
                             <i class="glyphicon glyphicon-search"></i>
                         </span>
-                        <input class="form-control" placeholder="上传头像" type="file" name="myfiles"/>
+                        <input class="form-control" id="myfiles" placeholder="上传头像" type="file" name="myfiles"/>
                     </div>
                 </div>
 

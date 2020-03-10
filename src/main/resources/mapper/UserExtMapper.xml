@@ -154,4 +154,9 @@
     select * from USER where username = #{username}
   </select>
 
+  <select id="findAvatarUrlById" parameterType="cn.edu.sdju.soft.community.model.User" resultType="java.lang.String">
+    select AVATAR_URL
+    from USER
+    where ID = #{id}
+  </select>
 </mapper>

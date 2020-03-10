@@ -60,4 +60,12 @@ public class CommentController {
         Long questionId = comment.getParentId();
         return "redirect:/question/" + questionId;
     }
+
+    @ResponseBody
+    @RequestMapping(value = "/thumbsUp/{id}",method = RequestMethod.GET)
+    public Comment thumbsUp(@PathVariable("id")Long id){
+        commentService.thumbsUp(id);
+        Comment comment = commentService.findByCommentId(id);
+        return comment;
+    }
 }

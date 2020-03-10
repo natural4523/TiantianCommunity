@@ -112,4 +112,8 @@ public class UserService {
     }
 
 
+    public String findAvatarUrlById(long id) {
+        String avatarUrl = userExtMapper.findAvatarUrlById(id);
+        return avatarUrl;
+    }
 }

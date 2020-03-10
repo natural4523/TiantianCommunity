@@ -35,4 +35,10 @@
     from COMMENT
     where ID = #{id}
   </select>
+
+  <update id="thumbsUp" parameterType="cn.edu.sdju.soft.community.model.Comment">
+    update COMMENT
+    SET LIKE_COUNT = LIKE_COUNT + 1
+    WHERE ID = #{id}
+  </update>
 </mapper>

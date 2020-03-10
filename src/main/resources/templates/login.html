@@ -59,7 +59,7 @@
                         </div>
 
                     </div>
-                    <span class="alert alert-danger" th:text="${error}" th:if="${error != null}"></span>
+                    <span class="alert alert-danger" style="margin-left: 20%" th:text="${error}" th:if="${error != null}"></span>
                 </form>
                 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
@@ -92,3 +92,31 @@
 <div th:insert="footer :: foot"></div>
 </body>
 </html>
+
+
+<!--
+<script>
+    $(function () {
+        var flag = false
+        var username = $("#username").val();
+        var password = $("#password").val();
+        $("form").submit(function () {
+
+            $.ajax({
+                type: "get",
+                url: "/checkLogin/" + username,
+                contentType: "application/json",
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+
+                }
+            })
+
+            return flag
+        })
+
+
+    })
+
+</script>-->

@@ -32,4 +32,5 @@ public interface UserExtMapper {
 
     User findByUsername1(@Param("username") String username);
 
+    String findAvatarUrlById(@Param("id")long id);
 }

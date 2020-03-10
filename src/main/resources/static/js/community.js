@@ -270,3 +270,18 @@ function unfreeze(e) {
     window.location.reload();
 
 }
+
+function thumbsUp(e) {
+    var id = e.getAttribute("data-id");
+
+    $.ajax({
+        type: "get",
+        url: "/thumbsUp/" + id,
+        contentType: "application/json",
+        dataType: "json",
+        success: function (data) {
+        }
+    })
+    window.location.reload();
+
+}

@@ -10,4 +10,6 @@ public interface CommentExtMapper {
     void deleteComment(@Param("id") Long id);
 
     Comment findByCommentId(@Param("id") Long id);
+
+    void thumbsUp(@Param("id")Long id);
 }
