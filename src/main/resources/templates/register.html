@@ -28,41 +28,41 @@
 <div class="container-fluid main profile">
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <h2 style="margin-left: 40%;margin-top: 50px">用户注册</h2>
+            <h2 style="margin-left: 45%;margin-top: 50px">用户注册</h2>
 
             <form style="margin-top: 2%;margin-bottom: 10%;margin-left: 30%" class="form-horizontal" action="/register" method="post">
                 <div class="form-group">
                     <label for="username" class="col-sm-2 control-label">账号</label>
                     <div class="col-sm-10" style="width: 30%">
-                        <input type="text" class="form-control" id="username" placeholder="账号" name="username">
+                        <input type="text" class="form-control" id="username" name="username">
                     </div>
                     <span id="msg1"></span>
                 </div>
                 <div class="form-group">
                     <label for="password" class="col-sm-2 control-label">密码</label>
                     <div class="col-sm-10" style="width: 30%">
-                        <input type="password" class="form-control" id="password" placeholder="密码" name="password">
+                        <input type="password" class="form-control" id="password" name="password">
                     </div>
                     <span id="msg2"></span>
                 </div>
                 <div class="form-group">
                     <label for="passwordAga" class="col-sm-2 control-label">确认密码</label>
                     <div class="col-sm-10" style="width: 30%">
-                        <input type="password" class="form-control" id="passwordAga" placeholder="请再次输入密码" name="passwordAga">
+                        <input type="password" class="form-control" id="passwordAga"  name="passwordAga">
                     </div>
                     <span id="msg3"></span>
                 </div>
                 <div class="form-group">
                     <label for="name" class="col-sm-2 control-label">昵称</label>
                     <div class="col-sm-10" style="width: 30%">
-                        <input type="text" class="form-control" id="name" placeholder="昵称" name="name">
+                        <input type="text" class="form-control" id="name" name="name">
                     </div>
                     <span id="msg4"></span>
                 </div>
                 <div class="form-group">
                     <label for="email" class="col-sm-2 control-label">Email</label>
                     <div class="col-sm-10" style="width: 30%">
-                        <input type="email" class="form-control" id="email" placeholder="邮箱" name="email">
+                        <input type="email" class="form-control" id="email" name="email">
                     </div>
                     <span id="msg5"></span>
                 </div>
@@ -120,7 +120,7 @@
 
                 <div class="form-group" style="margin-left: 85px">
                     <div class="col-sm-offset-2 col-sm-10">
-                        <button type="submit" class="btn btn-default">注册</button>
+                        <button type="submit" class="btn btn-default">确认</button>
                     </div>
                 </div>
                 <span class="alert alert-danger" th:text="${error}" th:if="${error != null}"></span>
@@ -148,7 +148,8 @@
             var username = $("#username").val();
 
             if (username == ''){
-                $('#msg1').html("<font color='red' style='font-size: large'>用户名不能为空</font>");
+                $('#msg1').html("<font color='red' style='font-size: large;font-family: 华文新魏'>用户名不能为空</font>");
+                flag1 = false;
             }else {
                 $.ajax({
                     type: "get",
@@ -158,66 +159,123 @@
                     success: function (data) {
                         console.log(data);
                         if (data == false){
-                            $('#msg1').html("<font color='red' style='font-size: large'>用户名已存在</font>");
+                            $('#msg1').html("<font color='red' style='font-size: large;font-family: 华文新魏'>用户名已存在</font>");
+                            flag1 = false;
                         }
                         if (data == true) {
-                            $('#msg1').html("<font color='#00fa9a' style='font-size: large'>用户名可以使用</font>");
+                            $('#msg1').html("<font color='#00fa9a' style='font-size: large;font-family: 华文新魏'>√</font>");
+                            flag1 = true;
                         }
                     }
                 })
             }
         })
 
-        /*$("#ognPassword").blur(function (t) {
-            var ognPassword = $("#ognPassword").val();
-            var userId = $("#userId").val();
-
-            $.ajax({
-                type: "get",
-                url: "/checkOgnPassword/" + userId,
-                contentType: "application/json",
-                dataType: "json",
-                success: function (data) {
-                    console.log(data);
-                    if(data.password == ognPassword){
-                        $('#msg1').html("<font color='#00fa9a' style='font-size: large'>√</font>");
-                        flag1 = true;
-                    }else{
-                        $('#msg1').html("<font color='red' style='font-size: large'>×</font>");
-                        flag1 = false;
-                    }
-                }
-            })
-        })
-
-        $("#newPassword").blur(function (t) {
-            var newPassword = $(this).val();
-            if (newPassword.length < 6){
-                $('#msg2').html("<font color='red' style='font-size: medium'>密码强度太低，请重新输入!</font>");
+        $("#password").blur(function (t) {
+            var password = $(this).val();
+            if (password .length == 0) {
+                $('#msg2').html("<font color='red' style='font-size: large;font-family: 华文新魏'>密码不能为空！</font>");
+                flag2 = false;
+            }else if (password.length < 6 && password.length > 0){
+                $('#msg2').html("<font color='red' style='font-size: large;font-family: 华文新魏'>密码强度太低，请重新输入!</font>");
                 flag2 = false;
             }else {
-                $('#msg2').html("<font color='#00fa9a' style='font-size: large'>√</font>");
+                $('#msg2').html("<font color='#00fa9a' style='font-size: large;font-family: 华文新魏'>√</font>");
                 flag2 = true;
             }
         })
 
-        $("#newPassword1").blur(function (t) {
-            var newPassword = $("#newPassword").val();
-            var newPassword1 = $(this).val();
-            if (newPassword != newPassword1){
-                $('#msg3').html("<font color='red' style='font-size: medium'>两次密码输入不一致</font>");
+
+        $("#passwordAga").blur(function (t) {
+            var password = $("#password").val();
+            var passwordAga = $(this).val();
+            if (password != passwordAga){
+                $('#msg3').html("<font color='red' style='font-size: medium;font-family: 华文新魏'>两次密码输入不一致</font>");
                 flag3 = false;
-            }else if(newPassword1 == ''){
-                $('#msg3').html("<font color='red' style='font-size: medium'>×</font>");
+            }else if(passwordAga == ''){
+                $('#msg3').html("<font color='red' style='font-size: medium;font-family: 华文新魏'>×</font>");
                 flag3 = false;
             } else{
-                $('#msg3').html("<font color='#00fa9a' style='font-size: large'>√</font>");
+                $('#msg3').html("<font color='#00fa9a' style='font-size: large;font-family: 华文新魏'>√</font>");
                 flag3 = true;
             }
-        })*/
+        })
+
+        $("#name").blur(function (t) {
+            var name = $(this).val();
+            if (name == ''){
+                $('#msg4').html("<font color='red' style='font-size: large;font-family: 华文新魏'>昵称不能为空！</font>");
+                flag4 = false;
+            } else {
+                $.ajax({
+                    type: "get",
+                    url: "/checkName/" + name,
+                    contentType: "application/json",
+                    dataType: "json",
+                    success: function (data) {
+                        console.log(data);
+                        if (data == false){
+                            $('#msg4').html("<font color='red' style='font-size: large;font-family: 华文新魏'>该昵称已存在</font>");
+                            flag4 = false;
+                        }
+                        if (data == true) {
+                            $('#msg4').html("<font color='#00fa9a' style='font-size: large;font-family: 华文新魏'>√</font>");
+                            flag4 = true;
+                        }
+                    }
+                })
+            }
+        })
+
+        $("#email").blur(function (t) {
+            var email = $(this).val();
+            if (email == ''){
+                $('#msg5').html("<font color='red' style='font-size: large;font-family: 华文新魏'>邮箱不能为空！</font>");
+                flag5 = false;
+            }else{
+                $('#msg5').html("<font color='#00fa9a' style='font-size: large;font-family: 华文新魏'>√</font>");
+                flag5 = true;
+            }
+        })
+
+        $("#checkAnswer1").blur(function (t) {
+            var answer = $(this).val();
+            if (answer == '') {
+                $('#msg6').html("<font color='red' style='font-size: large;font-family: 华文新魏'>答案不能为空！</font>");
+                flag6 = false;
+            }else{
+                $('#msg6').html("<font color='#00fa9a' style='font-size: large;font-family: 华文新魏'>√</font>");
+                flag6 = true;
+            }
+        })
+
+        $("#checkAnswer2").blur(function (t) {
+            var answer = $(this).val();
+            if (answer == '') {
+                $('#msg7').html("<font color='red' style='font-size: large;font-family: 华文新魏'>答案不能为空！</font>");
+                flag7 = false;
+            }else{
+                $('#msg7').html("<font color='#00fa9a' style='font-size: large;font-family: 华文新魏'>√</font>");
+                flag7 = true;
+            }
+        })
+
+        $("#checkAnswer3").blur(function (t) {
+            var answer = $(this).val();
+            if (answer == '') {
+                $('#msg8').html("<font color='red' style='font-size: large;font-family: 华文新魏'>答案不能为空！</font>");
+                flag8 = false;
+            }else{
+                $('#msg8').html("<font color='#00fa9a' style='font-size: large;font-family: 华文新魏'>√</font>");
+                flag8 = true;
+            }
+        })
+
+
 
         $("form").submit(function () {
-            return flag1&&flag2&&flag3;
+            alert("注册成功！");
+            return flag1&&flag2&&flag3&&flag4&&flag5&&flag6&&flag7&&flag8;
 
         })
     })

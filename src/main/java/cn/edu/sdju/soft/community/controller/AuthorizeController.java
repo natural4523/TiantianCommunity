@@ -339,6 +339,16 @@ public class AuthorizeController {
         }else {
             return false;
         }
+    }
 
+    @ResponseBody
+    @RequestMapping(value = "/checkName/{name}",method = RequestMethod.GET)
+    public boolean checkName(@PathVariable("name")String name){
+        User user = userService.checkName(name);
+        if (user == null){
+            return true;
+        }else {
+            return false;
+        }
     }
 }

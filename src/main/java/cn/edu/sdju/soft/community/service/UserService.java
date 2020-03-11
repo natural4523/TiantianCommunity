@@ -116,4 +116,9 @@ public class UserService {
         String avatarUrl = userExtMapper.findAvatarUrlById(id);
         return avatarUrl;
     }
+
+    public User checkName(String name) {
+        User user = userExtMapper.checkName(name);
+        return user;
+    }
 }

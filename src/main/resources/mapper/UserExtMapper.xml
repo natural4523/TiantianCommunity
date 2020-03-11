@@ -159,4 +159,10 @@
     from USER
     where ID = #{id}
   </select>
+
+  <select id="checkName" parameterType="cn.edu.sdju.soft.community.model.User" resultMap="BaseResultMap">
+    select *
+    from USER
+    where NAME = #{name}
+  </select>
 </mapper>
