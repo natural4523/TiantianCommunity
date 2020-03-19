@@ -61,4 +61,17 @@
         delete from section
         where id = #{sectionId}
     </delete>
+
+    <select id="checkSection" parameterType="cn.edu.sdju.soft.community.model.Section" resultMap="BaseResultMap">
+        select *
+        from section
+        where name = #{name}
+    </select>
+
+    <select id="checkEditSectionById" parameterType="cn.edu.sdju.soft.community.model.Section" resultMap="BaseResultMap">
+        select *
+        from section
+        where id = #{id}
+    </select>
+
 </mapper>

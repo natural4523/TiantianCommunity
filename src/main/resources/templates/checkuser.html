@@ -30,8 +30,9 @@
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <h2 style="margin-left: 46%;margin-top: 60px">用户验证</h2>
                 <form style="margin-top: 2%;margin-bottom: 10%;margin-left: 30%" class="form-horizontal" action="/toResetPassword" method="post">
+                    <input type="hidden" name="id" th:value="${userId}">
                     <div class="form-group" th:each="checkQuestion1:${checkQuestion1}">
-                        <label for="checkQuestion1" class="col-sm-2 control-label">验证问题一</label>
+                        <label class="col-sm-2 control-label">验证问题一</label>
                         <div class="col-sm-10">
                             <span id="checkQuestion1" th:text="${checkQuestion1.checkQuestions.name}"></span>
                         </div>
@@ -88,3 +89,4 @@
 <div th:insert="footer :: foot"></div>
 </body>
 </html>
+

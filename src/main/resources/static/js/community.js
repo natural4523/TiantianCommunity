@@ -285,3 +285,46 @@ function thumbsUp(e) {
     window.location.reload();
 
 }
+
+/*
+var flag = false
+function checkLogin() {
+    var username = $("#username").val();
+    var password = $("#password").val();
+    $.ajax({
+        type: "get",
+        url: "/checkUsername/" + username,
+        contentType: "application/json",
+        dataType: "json",
+        success: function (data) {
+            if (data == false) {
+                $.ajax({
+                    type: "get",
+                    url: "/checkLogin/" + username,
+                    contentType: "application/json",
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.password != password){
+                            alert("账号或密码错误！")
+                            console.log(111)
+                            flag = false
+                        } else if (data.state == 0) {
+                            alert("该用户已被冻结！")
+                            //window.location.reload()
+                            flag = false
+                        }else if (data.password == password) {
+                            flag = true
+                            //console.log(flag)
+                        }8
+                    }
+                })
+            }else {
+                alert("该用户不存在，请重新输入用户名！")
+                //window.location.reload()
+                flag = false
+            }
+        }
+    })
+    console.log(flag)
+    return flag
+}*/

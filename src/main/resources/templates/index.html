@@ -54,19 +54,20 @@
                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                                         <h4 style="text-align: center" class="modal-title" id="myModalLabel">添加版块</h4>
                                     </div>
-                                    <form class="form-horizontal" action="/addSection" method="post">
+                                    <form id="addForm" class="form-horizontal" action="/addSection" method="post">
                                         <input type="hidden" name="id" th:value="${session.user == null?null:session.user.id}">
                                         <div class="modal-body">
                                             <div class="form-group">
-                                                <label for="name" style="font-size: medium;" class="col-sm-2 control-label">版块名称:</label>
+                                                <label for="addName" style="font-size: medium;" class="col-sm-2 control-label">版块名称:</label>
                                                 <div class="col-sm-10" style="width: 30%">
-                                                    <input type="text" class="form-control" id="name" name="name">
+                                                    <input type="text" class="form-control" id="addName" name="name">
                                                 </div>
+                                                <span id="msg1"></span>
                                             </div>
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                                            <button type="submit" class="btn btn-primary">提交更改</button>
+                                            <button type="submit" class="btn btn-primary">确认</button>
                                         </div>
                                     </form>
                                 </div><!-- /.modal-content -->
@@ -85,7 +86,7 @@
                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                                         <h4 style="text-align: center" class="modal-title" id="myModal1Label">修改版块</h4>
                                     </div>
-                                    <form class="form-horizontal" action="/editSection" method="post">
+                                    <form id="editForm" class="form-horizontal" action="/editSection" method="post">
                                         <div class="modal-body">
                                             <div class="form-group form-inline" >
                                                 <label for="sectionId" style="font-size: medium;margin-left: 5%">
@@ -97,15 +98,16 @@
                                                 </select>
                                             </div>
                                             <div class="form-group">
-                                                <label for="name" style="font-size: medium;margin-left: 2.5%" class="col-sm-2 control-label">版块名称:</label>
+                                                <label for="editName" style="font-size: medium;margin-left: 2.5%" class="col-sm-2 control-label">版块名称:</label>
                                                 <div class="col-sm-10" style="width: 30%">
-                                                    <input type="text" class="form-control" placeholder="修改为..." name="name">
+                                                    <input type="text" class="form-control" id="editName" placeholder="修改为..." name="name">
                                                 </div>
+                                                <span id="msg2"></span>
                                             </div>
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                                            <button type="submit" class="btn btn-primary">提交更改</button>
+                                            <button type="submit" class="btn btn-primary">确认</button>
                                         </div>
                                     </form>
                                 </div><!-- /.modal-content -->
@@ -128,7 +130,7 @@
                                         <div class="modal-body">
                                             <div class="form-group form-inline" >
                                                 <label for="sectionId" style="font-size: medium;margin-left: 5%">
-                                                    需要修改的版块名称:
+                                                    请选择需要删除的版块名称:
                                                 </label>
                                                 <select class="form-control" th:name="sectionId" style="width: 30%;margin-left: 5%">
                                                     <option th:each="section:${sectionList}" th:value="${section.id}" th:text="${section.name}"
@@ -138,7 +140,7 @@
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                                            <button type="submit" class="btn btn-primary">提交更改</button>
+                                            <button type="submit" class="btn btn-primary">确认</button>
                                         </div>
                                     </form>
                                 </div><!-- /.modal-content -->
@@ -213,8 +215,82 @@
 
 <script>
     $(function () {
+        var flag1 = false;
+        var flag2 = false;
+
         $("#deleteQuestion").click(function (t) {
             alert("删除成功！")
         })
+
+        $("#addName").blur(function (t) {
+            var addName = $("#addName").val()
+            if (addName.length == 0) {
+                $('#msg1').html("<font color='red' style='font-size: large;font-family: 华文新魏'>版块名不能为空！</font>");
+                flag1 = false;
+            }else{
+                $.ajax({
+                    type: "get",
+                    url: "/checkSection/" + addName,
+                    contentType: "application/json",
+                    dataType: "json",
+                    success: function (data) {
+                        console.log(data);
+                        if (data == false){
+                            $('#msg1').html("<font color='red' style='font-size: large;font-family: 华文新魏'>该版块已存在！</font>");
+                            flag1 = false;
+                        }
+                        if (data == true) {
+                            $('#msg1').html("<font color='#00fa9a' style='font-size: large;font-family: 华文新魏'>√</font>");
+                            flag1 = true;
+                        }
+                    }
+                })
+
+            }
+        })
+
+        $("#editName").blur(function (t) {
+            var editName = $("#editName").val();
+            var sectionId = $("#sectionId").val();
+            console.log(sectionId)
+            if (editName.length == 0) {
+                $('#msg2').html("<font color='red' style='font-size: large;font-family: 华文新魏'>版块名不能为空！</font>");
+                flag2 = false;
+            }else{
+                $.ajax({
+                    type: "get",
+                    url: "/checkEditSection/" + sectionId,
+                    contentType: "application/json",
+                    dataType: "json",
+                    success: function (data) {
+                        console.log(data);
+                        if (data.name == editName){
+                            $('#msg2').html("<font color='red' style='font-size: large;font-family: 华文新魏'>版块名称不能修改为相同！</font>");
+                            flag2 = false;
+                        }else {
+                            $('#msg2').html("<font color='#00fa9a' style='font-size: large;font-family: 华文新魏'>√</font>");
+                            flag2 = true;
+                        }
+                    }
+                })
+
+            }
+        })
+
+        $("#addForm").submit(function (t) {
+            if (flag1 == true) {
+                alert("添加成功！")
+            }
+            return flag1
+        })
+
+        $("#editForm").submit(function (t) {
+            if (flag2 == true) {
+                alert("修改成功！")
+            }
+            return flag2
+        })
     })
+
+
 </script>

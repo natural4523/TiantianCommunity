@@ -281,6 +281,7 @@ public class AuthorizeController {
         model.addAttribute("checkQuestion1", userCheckQuestion1);
         model.addAttribute("checkQuestion2", userCheckQuestion2);
         model.addAttribute("checkQuestion3", userCheckQuestion3);
+        model.addAttribute("userId",user.getId());
         return "checkuser";
     }
 
@@ -291,10 +292,20 @@ public class AuthorizeController {
                                   @RequestParam("checkAnswer2")String checkAnswer2,
                                   @RequestParam("checkQuestion3")Long checkQuestion3,
                                   @RequestParam("checkAnswer3")String checkAnswer3,
+                                  @RequestParam("id")Long id,
                                   Model model){
-        UserCheckQuestion userCheckQuestion1 = userCheckQuestionService.findCheckQuestion(checkQuestion1,checkAnswer1);
-        UserCheckQuestion userCheckQuestion2 = userCheckQuestionService.findCheckQuestion(checkQuestion2, checkAnswer2);
-        UserCheckQuestion userCheckQuestion3 = userCheckQuestionService.findCheckQuestion(checkQuestion3, checkAnswer3);
+        List<UserCheckQuestion> userCheckQuestionList = userCheckQuestionService.findCheckQuestionByUserId(id);
+        UserCheckQuestion ognUserCheckQuestion1 = userCheckQuestionList.get(0);
+        UserCheckQuestion ognUserCheckQuestion2 = userCheckQuestionList.get(1);
+        UserCheckQuestion ognUserCheckQuestion3 = userCheckQuestionList.get(2);
+        model.addAttribute("checkQuestion1", ognUserCheckQuestion1);
+        model.addAttribute("checkQuestion2", ognUserCheckQuestion2);
+        model.addAttribute("checkQuestion3", ognUserCheckQuestion3);
+        model.addAttribute("userId", id);
+
+        UserCheckQuestion userCheckQuestion1 = userCheckQuestionService.findCheckQuestion(checkQuestion1,checkAnswer1,id);
+        UserCheckQuestion userCheckQuestion2 = userCheckQuestionService.findCheckQuestion(checkQuestion2, checkAnswer2,id);
+        UserCheckQuestion userCheckQuestion3 = userCheckQuestionService.findCheckQuestion(checkQuestion3, checkAnswer3,id);
         if (userCheckQuestion1 == null){
             model.addAttribute("error","验证问题一的答案有误，请重新输入！");
             return "checkuser";
@@ -351,4 +362,12 @@ public class AuthorizeController {
             return false;
         }
     }
+
+    @ResponseBody
+    @RequestMapping(value = "/checkLogin/{username}",method = RequestMethod.GET)
+    public User checkLogin(@PathVariable("username")String username){
+        User user = userService.findByUsername1(username);
+        return user;
+    }
+
 }

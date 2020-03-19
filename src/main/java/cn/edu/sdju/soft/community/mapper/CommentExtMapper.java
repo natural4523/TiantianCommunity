@@ -12,4 +12,6 @@ public interface CommentExtMapper {
     Comment findByCommentId(@Param("id") Long id);
 
     void thumbsUp(@Param("id")Long id);
+
+    int countCommentByParentId(@Param("id")Long id);
 }

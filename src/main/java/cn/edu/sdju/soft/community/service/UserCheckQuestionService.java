@@ -32,8 +32,9 @@ public class UserCheckQuestionService {
         return userCheckQuestionList;
     }
 
-    public UserCheckQuestion findCheckQuestion(Long question, String answer) {
-        UserCheckQuestion userCheckQuestion = userCheckQuestionExtMapper.findCheckQuestion(question,answer);
+
+    public UserCheckQuestion findCheckQuestion(Long question, String answer, Long id) {
+        UserCheckQuestion userCheckQuestion = userCheckQuestionExtMapper.findCheckQuestion(question,answer,id);
         return userCheckQuestion;
     }
 }

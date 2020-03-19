@@ -49,7 +49,7 @@
     <select id="findCheckQuestion" parameterType="cn.edu.sdju.soft.community.model.UserCheckQuestion" resultMap="BaseResultMap">
         select *
         from USERCHECKQUESTION
-        where question = #{question} and answer = #{answer}
+        where question = #{question} and answer = #{answer} and user_id = #{id}
     </select>
 
 </mapper>

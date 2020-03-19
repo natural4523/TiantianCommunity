@@ -41,4 +41,10 @@
     SET LIKE_COUNT = LIKE_COUNT + 1
     WHERE ID = #{id}
   </update>
+
+  <select id="countCommentByParentId" parameterType="cn.edu.sdju.soft.community.model.Comment" resultType="java.lang.Integer">
+    SELECT count(*)
+    from COMMENT
+    where PARENT_ID = #{id}
+  </select>
 </mapper>

@@ -13,4 +13,8 @@ public interface SectionExtMapper {
     void editSection(Section section);
 
     void deleteSection(@Param("sectionId") Long sectionId);
+
+    Section checkSection(@Param("name") String name);
+
+    Section checkEditSectionById(@Param("id") Long id);
 }

@@ -29,7 +29,8 @@
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <h2 style="margin-left: 46%;margin-top: 120px">用户登录</h2>
-                <form style="margin-top: 2%;margin-bottom: 10%;margin-left: 30%" class="form-horizontal" action="/login" method="post">
+                <form style="margin-top: 2%;margin-bottom: 10%;margin-left: 30%" class="form-horizontal" action="/login"
+                      method="post" onsubmit="return checkLogin()">
                     <div class="form-group">
                         <label for="username" class="col-sm-2 control-label">账号</label>
                         <div class="col-sm-10" style="width: 30%">
@@ -53,7 +54,7 @@
                     </div>
                     <div class="form-group" style="margin-left: 35px">
                         <div class="col-sm-offset-2 col-sm-10">
-                            <button type="submit" class="btn btn-default">登录</button>
+                            <button type="submit"  class="btn btn-default">登录</button>
                             <button type="button" class="btn btn-default" style="margin-left: 20px"
                                     data-toggle="modal" data-target="#myModal">重置密码</button>
                         </div>
@@ -94,29 +95,55 @@
 </html>
 
 
-<!--
 <script>
-    $(function () {
+    /*$(function () {
         var flag = false
-        var username = $("#username").val();
-        var password = $("#password").val();
-        $("form").submit(function () {
 
+        $("#password").blur(function () {
+            var username = $("#username").val();
+            var password = $("#password").val();
             $.ajax({
                 type: "get",
-                url: "/checkLogin/" + username,
+                url: "/checkUsername/" + username,
                 contentType: "application/json",
                 dataType: "json",
                 success: function (data) {
-                    console.log(data);
-
+                    console.log(data)
+                    if (data == false) {
+                        $.ajax({
+                            type: "get",
+                            url: "/checkLogin/" + username,
+                            contentType: "application/json",
+                            dataType: "json",
+                            success: function (data) {
+                                if (data.password != password){
+                                    alert("账号或密码错误！")
+                                    //window.location.reload()
+                                    console.log(data)
+                                    flag = false
+                                    login()
+                                } else if (data.state == 0) {
+                                    alert("该用户已被冻结！")
+                                    //window.location.reload()
+                                    flag = false
+                                    login()
+                                }else if (data.password == password) {
+                                    flag = true
+                                    console.log(flag)
+                                    login()
+                                }
+                            }
+                        })
+                    }else {
+                        alert("该用户不存在，请重新输入用户名！")
+                        //window.location.reload()
+                        flag = false
+                        login()
+                    }
                 }
             })
-
-            return flag
         })
 
 
-    })
-
-</script>-->
+    })*/
+</script>

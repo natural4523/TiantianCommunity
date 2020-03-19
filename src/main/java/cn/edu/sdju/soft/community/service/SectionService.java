@@ -13,7 +13,6 @@ public class SectionService {
     @Autowired
     private SectionExtMapper sectionExtMapper;
 
-
     public  List<Section> findAllSections() {
         List<Section> sectionList = sectionExtMapper.findAllSections();
         return sectionList;
@@ -30,5 +29,15 @@ public class SectionService {
 
     public void deleteSection(Long sectionId) {
         sectionExtMapper.deleteSection(sectionId);
+    }
+
+    public Section checkSection(String name) {
+        Section section = sectionExtMapper.checkSection(name);
+        return section;
+    }
+
+    public Section checkEditSectionById(Long id) {
+        Section section = sectionExtMapper.checkEditSectionById(id);
+        return section;
     }
 }

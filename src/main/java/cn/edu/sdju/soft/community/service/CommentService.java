@@ -164,4 +164,9 @@ public class CommentService {
     public void thumbsUp(Long id) {
         commentExtMapper.thumbsUp(id);
     }
+
+    public int countCommentByParentId(Long id) {
+        int comment = commentExtMapper.countCommentByParentId(id);
+        return comment;
+    }
 }

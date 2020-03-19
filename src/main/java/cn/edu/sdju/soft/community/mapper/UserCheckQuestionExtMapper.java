@@ -10,5 +10,5 @@ public interface UserCheckQuestionExtMapper {
 
     List<UserCheckQuestion> findCheckQuestionByUserId(@Param("id") Long id);
 
-    UserCheckQuestion findCheckQuestion(@Param("question") Long question, @Param("answer") String answer);
+    UserCheckQuestion findCheckQuestion(@Param("question") Long question, @Param("answer") String answer,@Param("id")Long id);
 }
